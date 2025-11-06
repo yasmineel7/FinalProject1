@@ -52,9 +52,25 @@ public class DopplerModel extends Model {
         
         //stationary observer ans source moving toward
         if (observer.getVelocity() == 0 && source.getPosition() < observer.getPosition()) {
-            
+            frequencyObserver = frequencySource * (velocityWave / (velocityWave - source.getVelocity()));
         }
         
+        //stationary observer and source moving away
+        if (observer.getVelocity() == 0 && source.getPosition() > observer.getPosition()) {
+            frequencyObserver = frequencySource * (velocityWave / (velocityWave + source.getVelocity()));
+        }
+        
+        //observer and source going toward
+        if (source.getPosition() < observer.getPosition() && !(source.getVelocity() == 0) && !(observer.getVelocity() == 0)) {
+            frequencyObserver = frequencySource * ((velocityWave + observer.getVelocity()) / (velocityWave - source.getVelocity()));
+        }
+        
+        //observer going toward and source going away ?????
+        //observer going away and source going toward???????
+        //observer and source moving away 
+        if (source.getPosition() > observer.getPosition() && !(source.getVelocity() == 0) && !(observer.getVelocity() == 0)) {
+            frequencyObserver = frequencySource * ((velocityWave - observer.getVelocity() / (velocityWave + source.getVelocity())));
+        }    
     }
 
     @Override
