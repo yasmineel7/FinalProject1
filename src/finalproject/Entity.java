@@ -6,17 +6,21 @@ package finalproject;
 
 /**
  *
- * @author yasmi
+ * @author Yasmine El Hattab 6298686
  */
-public class Entity extends Model {
+public class Entity {
     private double position;
     private double velocity;
     private double acceleration;
+    private double sourceFrequency;
+    private double observedFrequency;
 
-    public Entity(double position, double velocity, double acceleration) {
+    public Entity(double position, double velocity, double acceleration, double sourceFrequency, double observedFrequency) {
         this.position = position;
         this.velocity = velocity;
         this.acceleration = acceleration;
+        this.sourceFrequency = sourceFrequency;
+        this.observedFrequency = observedFrequency;
     }
 
     public double getPosition() {
@@ -43,12 +47,30 @@ public class Entity extends Model {
         this.acceleration = acceleration;
     }
 
+    public double getSourceFrequency() {
+        return sourceFrequency;
+    }
+
+    public void setSourceFrequency(double sourceFrequency) {
+        this.sourceFrequency = sourceFrequency;
+    }
+
+    public double getObservedFrequency() {
+        return observedFrequency;
+    }
+
+    public void setObservedFrequency(double observedFrequency) {
+        this.observedFrequency = observedFrequency;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 79 * hash + (int) (Double.doubleToLongBits(this.position) ^ (Double.doubleToLongBits(this.position) >>> 32));
-        hash = 79 * hash + (int) (Double.doubleToLongBits(this.velocity) ^ (Double.doubleToLongBits(this.velocity) >>> 32));
-        hash = 79 * hash + (int) (Double.doubleToLongBits(this.acceleration) ^ (Double.doubleToLongBits(this.acceleration) >>> 32));
+        hash = 61 * hash + (int) (Double.doubleToLongBits(this.position) ^ (Double.doubleToLongBits(this.position) >>> 32));
+        hash = 61 * hash + (int) (Double.doubleToLongBits(this.velocity) ^ (Double.doubleToLongBits(this.velocity) >>> 32));
+        hash = 61 * hash + (int) (Double.doubleToLongBits(this.acceleration) ^ (Double.doubleToLongBits(this.acceleration) >>> 32));
+        hash = 61 * hash + (int) (Double.doubleToLongBits(this.sourceFrequency) ^ (Double.doubleToLongBits(this.sourceFrequency) >>> 32));
+        hash = 61 * hash + (int) (Double.doubleToLongBits(this.observedFrequency) ^ (Double.doubleToLongBits(this.observedFrequency) >>> 32));
         return hash;
     }
 
@@ -70,8 +92,12 @@ public class Entity extends Model {
         if (Double.doubleToLongBits(this.velocity) != Double.doubleToLongBits(other.velocity)) {
             return false;
         }
-        return Double.doubleToLongBits(this.acceleration) == Double.doubleToLongBits(other.acceleration);
+        if (Double.doubleToLongBits(this.acceleration) != Double.doubleToLongBits(other.acceleration)) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.sourceFrequency) != Double.doubleToLongBits(other.sourceFrequency)) {
+            return false;
+        }
+        return Double.doubleToLongBits(this.observedFrequency) == Double.doubleToLongBits(other.observedFrequency);
     }
-    
-    
 }
