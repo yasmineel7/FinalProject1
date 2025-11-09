@@ -4,7 +4,11 @@
  */
 package finalproject;
 
+import java.io.IOException;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
@@ -17,12 +21,22 @@ public class FinalProject extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+       launch(args);
     }
 
     @Override
     public void start(Stage stage) {
+        try {
+        Parent root = FXMLLoader.load(getClass().getResource("finalProject.fxml"));
         
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Doppler Effect Simulation");
+        stage.show();
+        }
+        catch (IOException e) {
+            
+        }
     }
     
 }
