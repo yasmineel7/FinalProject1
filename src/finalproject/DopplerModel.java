@@ -18,11 +18,33 @@ public class DopplerModel {
     private Entity entityA;
     private double time;
    
-      public DopplerModel(double velocityWave, Entity source, Entity observer, double time) { 
+    public DopplerModel(double velocityWave, Entity source, Entity observer, double time) { 
         this.velocityWave = velocityWave;
         this.entityB = source;
         this.entityA = observer;
         this.time = time;
+    }
+    
+    /**
+     * Updates the position, velocity, and observed frequencies of both observers
+     * @param dt Delta-time: the time since the last update
+     */
+    public void update(double dt) {
+        updateEntity(entityA, dt);
+        updateEntity(entityB, dt);
+        
+        updateObservedFrequency();
+    }
+    
+    /**
+     * Updates an entity's position and velocity depending on the time since
+     * last update
+     * @param entity The entity to update
+     * @param dt Delta-time: the time since the last update
+     */
+    private void updateEntity(Entity entity, double dt) {
+        entity.setVelocity(entity.getVelocity() + entity.getAcceleration() * dt);
+        entity.setPosition(entity.getPosition() + entity.getVelocity() * dt);
     }
       
     /**
