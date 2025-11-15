@@ -30,11 +30,13 @@ public class DopplerModel {
      * @param dt Delta-time: the time since the last update
      */
     public void update(double dt) {
-        updateEntity(entityA, dt);
-        updateEntity(entityB, dt);
+        updateKinematicState(entityA, dt);
+        updateKinematicState(entityB, dt);
         
         updateObservedFrequency(entityA, entityB);
         updateObservedFrequency(entityB, entityA);
+        
+        time += dt;
     }
     
     /**
@@ -43,7 +45,7 @@ public class DopplerModel {
      * @param entity The entity to update
      * @param dt Delta-time: the time since the last update
      */
-    private void updateEntity(Entity entity, double dt) {
+    private void updateKinematicState(Entity entity, double dt) {
         entity.setVelocity(entity.getVelocity() + entity.getAcceleration() * dt);
         entity.setPosition(entity.getPosition() + entity.getVelocity() * dt);
     }
