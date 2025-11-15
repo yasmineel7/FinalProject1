@@ -33,7 +33,8 @@ public class DopplerModel {
         updateEntity(entityA, dt);
         updateEntity(entityB, dt);
         
-        updateObservedFrequency();
+        updateObservedFrequency(entityA, entityB);
+        updateObservedFrequency(entityB, entityA);
     }
     
     /**
@@ -46,146 +47,30 @@ public class DopplerModel {
         entity.setVelocity(entity.getVelocity() + entity.getAcceleration() * dt);
         entity.setPosition(entity.getPosition() + entity.getVelocity() * dt);
     }
-      
+    
     /**
-     * calculate the observed frequency depending on the case chosen 
-     * and the position of the entity
-     */  
-    public void updateObservedFrequency() {
-        boolean sourceVelocityNull = entityB.getVelocity() == 0;
-        boolean observerVelocityNull = entityA.getVelocity() == 0;
-        boolean positionSourceLeft = entityB.getPosition() < entityA.getPosition();
-        boolean positionSourceRight = entityB.getPosition() > entityA.getPosition();
-        boolean sourceVelocityNegative = entityB.getVelocity() < 0;
-        boolean sourceVelocityPositive = entityB.getVelocity() > 0;
-        boolean observerVelocityNegative = entityA.getVelocity() < 0;
-        boolean observerVelocityPositive = entityA.getVelocity() > 0;
+     * Updates an entity's observed frequency based on the other entity's source frequency
+     * @param observer The entity who's observed frequency should be updated
+     * @param source The entity who provides the source frequency
+     */
+    private void updateObservedFrequency(Entity observer, Entity source) {
+        double sourceFrequency = source.getSourceFrequency();
+        double observedFrequency;
         
-        if (entityA.getSourceFrequency() == 0) {
-        //calculation for the most basic case and assuming that the entityA is going toward (that the entityB position < then entityA so going toward)
-        if (sourceVelocityNull && positionSourceLeft) {
-            entityA.setObservedFrequency(entityB.getSourceFrequency() * ((velocityWave + entityA.getVelocity()) / velocityWave));
+        double sourceVelocity = source.getVelocity();
+        double observerVelocity = observer.getVelocity();
+        
+        // <= instead of < since we want the 'source left of observer' equation
+        // when both the source and observer are at the same position
+        boolean sourceLeftOfObserver = source.getPosition() <= observer.getPosition();
+        
+        if (sourceLeftOfObserver) {
+            observedFrequency = sourceFrequency * (velocityWave - observerVelocity) / (velocityWave - sourceVelocity);
+        } else {
+            observedFrequency = sourceFrequency * (velocityWave + observerVelocity) / (velocityWave + sourceVelocity);
         }
         
-        //basic case and entityA is moving away
-        if (sourceVelocityNull && positionSourceRight) {
-            entityA.setObservedFrequency(entityB.getSourceFrequency() * ((velocityWave - entityA.getVelocity()) / velocityWave));
-        }
-        
-        //no one is moving
-        if (sourceVelocityNull && observerVelocityNull) {
-           entityA.setObservedFrequency(entityB.getSourceFrequency());
-        }
-        
-        //stationary entityA ans entityB moving toward
-        if (observerVelocityNull && positionSourceLeft) {
-            entityA.setObservedFrequency(entityB.getSourceFrequency() * (velocityWave / (velocityWave - entityB.getVelocity())));
-        }
-        
-        //stationary entityA and entityB moving away
-        if (observerVelocityNull && positionSourceRight) {
-           entityA.setObservedFrequency(entityB.getSourceFrequency() * (velocityWave / (velocityWave + entityB.getVelocity())));
-        }
-        
-        //observer and entityB going toward
-        if (positionSourceLeft && sourceVelocityPositive && observerVelocityNegative) {
-            entityA.setObservedFrequency(entityB.getSourceFrequency() * ((velocityWave + entityA.getVelocity()) / (velocityWave - entityB.getVelocity())));
-        }
-        
-        if (positionSourceRight && sourceVelocityNegative && observerVelocityPositive) {
-            entityA.setObservedFrequency(entityB.getSourceFrequency() * ((velocityWave + entityA.getVelocity()) / (velocityWave - entityB.getVelocity())));
-        }
-        
-        //observer going toward and entityB going away ?????
-        if (positionSourceRight && sourceVelocityPositive && observerVelocityPositive) {
-            entityA.setObservedFrequency(entityB.getSourceFrequency()* ((velocityWave + entityA.getVelocity()) / (velocityWave + entityB.getVelocity())));
-        }
-        
-        if (positionSourceLeft && sourceVelocityNegative && observerVelocityNegative) {
-            entityA.setObservedFrequency(entityB.getSourceFrequency()* ((velocityWave + entityA.getVelocity()) / (velocityWave + entityB.getVelocity())));
-        }
-        
-        //observer going away and entityB going toward???????
-        if (positionSourceLeft && sourceVelocityPositive && observerVelocityPositive) {
-            entityA.setObservedFrequency(entityB.getSourceFrequency()* ((velocityWave - entityA.getVelocity()) / (velocityWave - entityB.getVelocity())));
-        }
-        
-        if (positionSourceRight && sourceVelocityNegative && observerVelocityNegative) {
-            entityA.setObservedFrequency(entityB.getSourceFrequency()* ((velocityWave - entityA.getVelocity()) / (velocityWave - entityB.getVelocity())));
-        }
-        
-        //observer and entityB moving away 
-        if (positionSourceRight && observerVelocityNegative && sourceVelocityPositive) {
-            entityA.setObservedFrequency(entityB.getSourceFrequency() * ((velocityWave - entityA.getVelocity() / (velocityWave + entityB.getVelocity()))));
-        }    
-        
-        if (positionSourceLeft && observerVelocityPositive && sourceVelocityNegative) {
-            entityA.setObservedFrequency(entityB.getSourceFrequency() * ((velocityWave - entityA.getVelocity() / (velocityWave + entityB.getVelocity()))));
-        }   
-    }
-        
-        if (entityB.getSourceFrequency() == 0) {
-               //calculation for the most basic case and assuming that the entityA is going toward (that the entityB position < then entityA so going toward)
-        if (sourceVelocityNull && positionSourceLeft) {
-            entityB.setObservedFrequency(entityA.getSourceFrequency() * ((velocityWave + entityB.getVelocity()) / velocityWave));
-        }
-        
-        //basic case and entityA is moving away
-        if (sourceVelocityNull && positionSourceRight) {
-            entityB.setObservedFrequency(entityA.getSourceFrequency() * ((velocityWave - entityB.getVelocity()) / velocityWave));
-        }
-        
-        //no one is moving
-        if (sourceVelocityNull && observerVelocityNull) {
-           entityB.setObservedFrequency(entityA.getSourceFrequency());
-        }
-        
-        //stationary entityA ans entityB moving toward
-        if (observerVelocityNull && positionSourceLeft) {
-            entityB.setObservedFrequency(entityA.getSourceFrequency() * (velocityWave / (velocityWave - entityA.getVelocity())));
-        }
-        
-        //stationary entityA and entityB moving away
-        if (observerVelocityNull && positionSourceRight) {
-           entityB.setObservedFrequency(entityA.getSourceFrequency() * (velocityWave / (velocityWave + entityA.getVelocity())));
-        }
-        
-        //observer and entityB going toward
-        if (positionSourceLeft && sourceVelocityPositive && observerVelocityNegative) {
-            entityB.setObservedFrequency(entityA.getSourceFrequency() * ((velocityWave + entityB.getVelocity()) / (velocityWave - entityA.getVelocity())));
-        }
-        
-        if (positionSourceRight && sourceVelocityNegative && observerVelocityPositive) {
-            entityB.setObservedFrequency(entityA.getSourceFrequency() * ((velocityWave + entityB.getVelocity()) / (velocityWave - entityA.getVelocity())));
-        }
-        
-        //observer going toward and entityB going away ?????
-        if (positionSourceRight && sourceVelocityPositive && observerVelocityPositive) {
-            entityB.setObservedFrequency(entityA.getSourceFrequency()* ((velocityWave + entityB.getVelocity()) / (velocityWave + entityA.getVelocity())));
-        }
-        
-        if (positionSourceLeft && sourceVelocityNegative && observerVelocityNegative) {
-            entityB.setObservedFrequency(entityA.getSourceFrequency()* ((velocityWave + entityB.getVelocity()) / (velocityWave + entityA.getVelocity())));
-        }
-        
-        //observer going away and entityB going toward???????
-        if (positionSourceLeft && sourceVelocityPositive && observerVelocityPositive) {
-            entityB.setObservedFrequency(entityA.getSourceFrequency()* ((velocityWave - entityB.getVelocity()) / (velocityWave - entityA.getVelocity())));
-        }
-        
-        if (positionSourceRight && sourceVelocityNegative && observerVelocityNegative) {
-            entityB.setObservedFrequency(entityA.getSourceFrequency()* ((velocityWave - entityB.getVelocity()) / (velocityWave - entityA.getVelocity())));
-        }
-        
-        //observer and entityB moving away 
-        if (positionSourceRight && observerVelocityNegative && sourceVelocityPositive) {
-            entityB.setObservedFrequency(entityA.getSourceFrequency() * ((velocityWave - entityB.getVelocity() / (velocityWave + entityA.getVelocity()))));
-        }    
-        
-        if (positionSourceLeft && observerVelocityPositive && sourceVelocityNegative) {
-            entityB.setObservedFrequency(entityA.getSourceFrequency() * ((velocityWave - entityB.getVelocity() / (velocityWave + entityA.getVelocity()))));
-        }   
-        }
+        observer.setObservedFrequency(observedFrequency);
     }
 
     @Override
