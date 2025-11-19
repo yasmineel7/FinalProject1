@@ -8,6 +8,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="finalproject.FinalProjectController">
    <left>
@@ -17,7 +21,31 @@
       <HBox fx:id="graphHBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="8.0" BorderPane.alignment="CENTER" />
    </bottom>
    <center>
-      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Pane fx:id="truckA">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="80.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" layoutX="77.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
+                  <Circle fill="WHITE" layoutX="15.0" layoutY="40.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
+                  <Circle fill="WHITE" layoutX="65.0" layoutY="40.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
+                  <Text layoutX="20.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Truck A">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+            <Pane fx:id="truckB" layoutX="200.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="60.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="20.0" layoutX="57.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="15.0" />
+                  <Circle fill="WHITE" layoutX="10.0" layoutY="30.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
+                  <Circle fill="WHITE" layoutX="50.0" layoutY="30.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
+                  <Text layoutX="10.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Truck B" />
+               </children>
+            </Pane>
+         </children></Pane>
    </center>
    <padding>
       <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
