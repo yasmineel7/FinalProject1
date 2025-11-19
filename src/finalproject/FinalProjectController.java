@@ -17,13 +17,13 @@ import javafx.scene.layout.HBox;
 /**
  * FXML Controller class
  *
- * @author Yasmine
+ * @author Yasmine and Jacques
  */
 public class FinalProjectController implements Initializable {
+    private LineChart[] charts = new LineChart[2];
+    
     @FXML
     private HBox graphHBox;
-    
-    private LineChart[] charts = new LineChart[2];
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -47,7 +47,13 @@ public class FinalProjectController implements Initializable {
             
             lineChart.getData().add(series);
             
+            charts[i] = lineChart;
             graphHBox.getChildren().add(lineChart);
         }
+    }
+    
+    public void addPoint(int chartIndex, double time, double frequency) {
+        Series series = (Series) charts[chartIndex].getData().get(0);
+        series.getData().add(new XYChart.Data<>(time, frequency));
     }
 }
