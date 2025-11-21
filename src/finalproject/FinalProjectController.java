@@ -31,12 +31,40 @@ import javafx.scene.input.MouseEvent;
 public class FinalProjectController implements Initializable {
     private LineChart[] charts = new LineChart[2];
     
+    
+    //Entity variables
+    double velocity = 20; //variable to change
+    double time = 100; //variable to change
+    Entity entityA;
+    Entity entityB;
+    
+    DopplerModel model = new DopplerModel(velocity, entityA, entityB, time);
+    
     @FXML
     private HBox graphHBox;
+    
+    @FXML
+    private TitledPane entityBTitlePane, entityATitlePane;
+
+    @FXML
+    private Label accelerationALabel, accelerationBLabel, positionALabel, positionBLabel, velocityALabel, velocityBLabel;
+
+    @FXML
+    private Slider accelerationASlider, accelerationBSlider, positionASlider, positionBSlider, velocityASlider, velocityBSlider;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initializeCharts();
+        double position = 5;
+        double velocity = 20;
+        double acceleration = 3;
+        double observedFrequency = 20;
+        double sourceFrequency1 = 10;
+        double sourcefrequency2 = 0;
+        entityA = new Entity(position, velocity, acceleration, 0, 20);
+        entityB = new Entity(position, velocity, acceleration, sourceFrequency1, observedFrequency);
+        
+        model.update(time);
     }
     
     /**
@@ -64,19 +92,7 @@ public class FinalProjectController implements Initializable {
     public void addPoint(int chartIndex, double time, double frequency) {
         Series series = (Series) charts[chartIndex].getData().get(0);
         series.getData().add(new XYChart.Data<>(time, frequency));
-    }
-     @FXML
-    private TitledPane entityBTitlePane, entityATitlePane;
-
-    @FXML
-    private Label accelerationALabel, accelerationBLabel, positionALabel, positionBLabel, velocityALabel, velocityBLabel;
-
-    @FXML
-    private Slider accelerationASlider, accelerationBSlider, positionASlider, positionBSlider, velocityASlider, velocityBSlider;
-
-    //Entity variables
-    Entity entityA;
-    Entity entityB;    
+    } 
  
     /**
      * handle the velocity of the entity B
