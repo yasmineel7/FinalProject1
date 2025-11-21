@@ -59,6 +59,23 @@ public class FinalProjectController implements Initializable {
             charts[i] = lineChart;
             graphHBox.getChildren().add(lineChart);
         }
+        
+        for (int i = 0; i < 2; i++) {
+            NumberAxis timeAxis = new NumberAxis(); timeAxis.setLabel("Time (s)");
+            NumberAxis pressureAxis = new NumberAxis(); pressureAxis.setLabel("Pressure (kPa)");
+            
+            LineChart lineChart = new LineChart(timeAxis, pressureAxis);
+            lineChart.setTitle("Pressure observed by " + (char)(65 + i));
+            lineChart.setCreateSymbols(false);
+            lineChart.setLegendVisible(false);
+            
+            Series series = new XYChart.Series<>();
+            
+            lineChart.getData().add(series);
+            
+            charts[i] = lineChart;
+            graphHBox.getChildren().add(lineChart);
+        }
     }
     
     public void addPoint(int chartIndex, double time, double frequency) {
