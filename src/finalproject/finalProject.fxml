@@ -12,16 +12,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="finalproject.FinalProjectController">
    <left>
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="8.0" BorderPane.alignment="CENTER">
          <children>
-            <TitledPane fx:id="entityATitlePane" animated="false" prefHeight="72.0" prefWidth="96.0" text="EntityA">
+            <TitledPane fx:id="entityATitlePane" animated="false" text="EntityA">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="85.0" prefWidth="75.0">
                      <children>
@@ -41,7 +37,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </TitledPane>
-            <TitledPane fx:id="entityBTitlePane" animated="false" prefHeight="365.0" prefWidth="96.0" text="Entity B">
+            <TitledPane fx:id="entityBTitlePane" animated="false" text="Entity B">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="259.0" prefWidth="94.0">
                      <children>
