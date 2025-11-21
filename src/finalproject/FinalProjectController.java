@@ -30,7 +30,6 @@ public class FinalProjectController implements Initializable {
     @FXML
     private Slider accelerationASlider, accelerationBSlider, positionASlider, positionBSlider, velocityASlider, velocityBSlider;
 
-    
     //Entity variables
     Entity entityA;
     Entity entityB;
@@ -43,31 +42,55 @@ public class FinalProjectController implements Initializable {
         // TODO
     }    
  
+    /**
+     * handle the velocity of the entity B
+     * @param event the mouseEvent
+     */
     @FXML
     public void handleVelocityB(MouseEvent event) {
         entityB.setVelocity((double) velocityBSlider.getUserData());
     }
     
+    /**
+     * handle the velocity of entity A
+     * @param event the mouseEvent
+     */
+     @FXML
+    void handleVelocityA(MouseEvent event) {
+        entityA.setVelocity((double) velocityASlider.getUserData());
+    }
+    
+    /**
+     * handle the acceleration of entity A
+     * @param event the mouseEvent
+     */
      @FXML
     void handleAccelerationA(MouseEvent event) {
         entityA.setAcceleration((double) accelerationASlider.getUserData());
     }
 
+    /**
+     * handle the acceleration of entity B
+     * @param event the mouseEvent
+     */
     @FXML
     void handleAccelerationB(MouseEvent event) {
         entityB.setAcceleration((double) accelerationBSlider.getUserData());
     }
 
+    /**
+     * handle the position of entity A
+     * @param event 
+     */
     @FXML
     void handlePositionA(MouseEvent event) {
         entityA.setPosition((double) positionASlider.getUserData());
     }
 
-    @FXML
-    void handleVelocityA(MouseEvent event) {
-        entityA.setVelocity((double) velocityASlider.getUserData());
-    }
-
+    /**
+     * handle the position of entity B
+     * @param event 
+     */
     @FXML
     void hundlePositionB(MouseEvent event) {
         entityB.setPosition((double) positionBSlider.getUserData());
