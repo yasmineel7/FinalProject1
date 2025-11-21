@@ -84,7 +84,7 @@ public class FinalProjectController implements Initializable {
      */
     @FXML
     public void handleVelocityB(MouseEvent event) {
-        entityB.setVelocity((double) velocityBSlider.getUserData());
+        entityB.setVelocity((double) velocityBSlider.getValue());
     }
     
     /**
@@ -93,7 +93,7 @@ public class FinalProjectController implements Initializable {
      */
      @FXML
     void handleVelocityA(MouseEvent event) {
-        entityA.setVelocity((double) velocityASlider.getUserData());
+        entityA.setVelocity((double) velocityASlider.getValue());
     }
     
     /**
@@ -102,7 +102,7 @@ public class FinalProjectController implements Initializable {
      */
      @FXML
     void handleAccelerationA(MouseEvent event) {
-        entityA.setAcceleration((double) accelerationASlider.getUserData());
+        entityA.setAcceleration((double) accelerationASlider.getValue());
     }
 
     /**
@@ -111,7 +111,7 @@ public class FinalProjectController implements Initializable {
      */
     @FXML
     void handleAccelerationB(MouseEvent event) {
-        entityB.setAcceleration((double) accelerationBSlider.getUserData());
+        entityB.setAcceleration((double) accelerationBSlider.getValue());
     }
 
     /**
@@ -120,7 +120,7 @@ public class FinalProjectController implements Initializable {
      */
     @FXML
     void handlePositionA(MouseEvent event) {
-        entityA.setPosition((double) positionASlider.getUserData());
+        entityA.setPosition((double) positionASlider.getValue());
     }
 
     /**
@@ -129,6 +129,6 @@ public class FinalProjectController implements Initializable {
      */
     @FXML
     void hundlePositionB(MouseEvent event) {
-        entityB.setPosition((double) positionBSlider.getUserData());
+        entityB.setPosition((double) positionBSlider.getValue());
     }
 }
