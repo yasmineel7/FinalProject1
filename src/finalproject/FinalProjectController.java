@@ -76,15 +76,7 @@ public class FinalProjectController implements Initializable {
 
     //Entity variables
     Entity entityA;
-    Entity entityB;
-
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+    Entity entityB;    
  
     /**
      * handle the velocity of the entity B
