@@ -6,6 +6,7 @@ package finalproject;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
@@ -50,6 +51,8 @@ public class FinalProjectController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         initializeCharts();
         adjustPreferredSizes();
+        
+        startSimulation();
     }
     
     /**
@@ -72,6 +75,33 @@ public class FinalProjectController implements Initializable {
         pressureChartB = createChart("Pressure Observed by B", "Time (s)", "Pressure (kPa)");
         
         graphHBox.getChildren().addAll(frequencyChartA, frequencyChartB, pressureChartA, pressureChartB);
+    }
+    
+    /**
+     * Starts the simulation, updating the model and UI elements with respect to FPS
+     */
+    private void startSimulation() {
+        AnimationTimer timer = new AnimationTimer() {
+            private long lastTime = 0;
+            
+            @Override
+            public void handle(long now) {
+                double dt = (now - lastTime) / 1e9; // now and lastTime in nanoseconds, dt in seconds
+                model.update(dt);
+                updateTruckPositions();
+                lastTime = now;
+            }
+        };
+        
+        timer.start();
+    }
+    
+    /**
+     * Updates the LayoutX of the trucks based on the positions of the model's entities
+     */
+    private void updateTruckPositions() {
+        truckA.setLayoutX(model.getEntityA().getPosition());
+        truckB.setLayoutX(model.getEntityB().getPosition());
     }
     
     /**
