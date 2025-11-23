@@ -49,6 +49,10 @@ public class FinalProjectController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // Used for testing, can be removed
+        model.getEntityA().setSourceFrequency(50);
+        model.getEntityB().setSourceFrequency(50);
+        
         initializeCharts();
         adjustPreferredSizes();
         
@@ -82,13 +86,24 @@ public class FinalProjectController implements Initializable {
      */
     private void startSimulation() {
         AnimationTimer timer = new AnimationTimer() {
-            private long lastTime = 0;
+            private long lastTime = -1;
             
             @Override
             public void handle(long now) {
+                if (lastTime < 0) {
+                    lastTime = now;
+                }
+                
                 double dt = (now - lastTime) / 1e9; // now and lastTime in nanoseconds, dt in seconds
+                
                 model.update(dt);
-                updateTruckPositions();
+                
+                addPoint(frequencyChartA, model.getTime(), model.getEntityA().getObservedFrequency());
+                addPoint(frequencyChartB, model.getTime(), model.getEntityB().getObservedFrequency());
+                
+                updateTrucks();
+                updateSliders();
+                
                 lastTime = now;
             }
         };
@@ -99,9 +114,25 @@ public class FinalProjectController implements Initializable {
     /**
      * Updates the LayoutX of the trucks based on the positions of the model's entities
      */
-    private void updateTruckPositions() {
+    private void updateTrucks() {
         truckA.setLayoutX(model.getEntityA().getPosition());
         truckB.setLayoutX(model.getEntityB().getPosition());
+    }
+    
+    /**
+     * Updates the sliders based on the entity's kinematic properties
+     */
+    private void updateSliders() {
+        Entity entityA = model.getEntityA();
+        Entity entityB = model.getEntityB();
+        
+        if (!positionASlider.isValueChanging()) positionASlider.setValue(entityA.getPosition());
+        if (!velocityASlider.isValueChanging()) velocityASlider.setValue(entityA.getVelocity());
+        if (!accelerationASlider.isValueChanging()) accelerationASlider.setValue(entityA.getAcceleration());
+        
+        if (!positionBSlider.isValueChanging()) positionBSlider.setValue(entityB.getPosition());
+        if (!velocityBSlider.isValueChanging()) velocityBSlider.setValue(entityB.getVelocity());
+        if (!accelerationBSlider.isValueChanging()) accelerationBSlider.setValue(entityB.getAcceleration());
     }
     
     /**
@@ -114,9 +145,16 @@ public class FinalProjectController implements Initializable {
     private LineChart<Number, Number> createChart(String title, String xAxisLabel, String yAxisLabel) {
         NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel(xAxisLabel);
+        xAxis.setLowerBound(0);
+        xAxis.setUpperBound(30);
+        xAxis.setAutoRanging(false);
         
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel(yAxisLabel);
+        yAxis.setLowerBound(0);
+        yAxis.setUpperBound(100);
+        yAxis.setTickUnit(25);
+        yAxis.setAutoRanging(false);
         
         LineChart<Number, Number> lineChart = new LineChart(xAxis, yAxis);
         lineChart.setTitle(title);
