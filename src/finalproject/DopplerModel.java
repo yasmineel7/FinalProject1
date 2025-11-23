@@ -17,11 +17,17 @@ public class DopplerModel {
     private Entity entityB;
     private Entity entityA;
     private double time;
+    
+    public DopplerModel() {
+        this.velocityWave = 343;
+        this.entityB = new Entity();
+        this.entityA = new Entity();
+    }
    
-    public DopplerModel(double velocityWave, Entity source, Entity observer, double time) { 
+    public DopplerModel(double velocityWave, Entity entityB, Entity entityA, double time) { 
         this.velocityWave = velocityWave;
-        this.entityB = source;
-        this.entityA = observer;
+        this.entityB = entityB;
+        this.entityA = entityA;
         this.time = time;
     }
     
