@@ -33,25 +33,18 @@ import javafx.scene.layout.VBox;
  * @author Yasmine and Jacques
  */
 public class FinalProjectController implements Initializable {
+    DopplerModel model = new DopplerModel();
+    
     LineChart<Number, Number> frequencyChartA;
     LineChart<Number, Number> frequencyChartB;
     LineChart<Number, Number> pressureChartA;
     LineChart<Number, Number> pressureChartB;
     
-    @FXML
-    private HBox graphHBox;
-    @FXML
-    private BorderPane root;
-    @FXML
-    private Pane truckA;
-    @FXML
-    private Pane truckB;
-    @FXML
-    private VBox entityPropertiesVBox;
-    @FXML
-    private TitledPane entityATitledPane;
-    @FXML
-    private TitledPane entityBTitledPane;
+    @FXML private BorderPane root;
+    @FXML private HBox graphHBox;
+    @FXML private Pane truckA, truckB;
+    @FXML private VBox entityPropertiesVBox;
+    @FXML private Slider positionASlider, positionBSlider, velocityASlider, velocityBSlider, accelerationASlider, accelerationBSlider;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -114,68 +107,35 @@ public class FinalProjectController implements Initializable {
      */
     private void addPoint(LineChart lineChart, double x, double y) {
         Series<Number, Number> series = (Series<Number, Number>) lineChart.getData().get(0);
-        series.getData().add(new XYChart.Data<Number, Number>(x, y));
-    }
-    
-
-    @FXML
-    private Slider accelerationASlider, accelerationBSlider, positionASlider, positionBSlider, velocityASlider, velocityBSlider;
-
-    //Entity variables
-    Entity entityA;
-    Entity entityB;    
- 
-    /**
-     * handle the velocity of the entity B
-     * @param event the mouseEvent
-     */
-    @FXML
-    public void handleVelocityB(MouseEvent event) {
-        entityB.setVelocity((double) velocityBSlider.getUserData());
-    }
-    
-    /**
-     * handle the velocity of entity A
-     * @param event the mouseEvent
-     */
-     @FXML
-    void handleVelocityA(MouseEvent event) {
-        entityA.setVelocity((double) velocityASlider.getUserData());
-    }
-    
-    /**
-     * handle the acceleration of entity A
-     * @param event the mouseEvent
-     */
-     @FXML
-    void handleAccelerationA(MouseEvent event) {
-        entityA.setAcceleration((double) accelerationASlider.getUserData());
+        series.getData().add(new XYChart.Data<>(x, y));
     }
 
-    /**
-     * handle the acceleration of entity B
-     * @param event the mouseEvent
-     */
     @FXML
-    void handleAccelerationB(MouseEvent event) {
-        entityB.setAcceleration((double) accelerationBSlider.getUserData());
-    }
-
-    /**
-     * handle the position of entity A
-     * @param event 
-     */
-    @FXML
-    void handlePositionA(MouseEvent event) {
-        entityA.setPosition((double) positionASlider.getUserData());
-    }
-
-    /**
-     * handle the position of entity B
-     * @param event 
-     */
-    @FXML
-    void hundlePositionB(MouseEvent event) {
-        entityB.setPosition((double) positionBSlider.getUserData());
+    private void handleSlider(MouseEvent event) {
+        Slider slider = (Slider) event.getSource();
+        double value = slider.getValue();
+        
+        Entity entity;
+        String property;
+        
+        if (slider == positionASlider || slider == velocityASlider || slider == accelerationASlider) {
+            entity = model.getEntityA();
+        } else {
+            entity = model.getEntityB();
+        }
+        
+        if (slider == positionASlider || slider == positionBSlider) {
+            property = "position";
+        } else if (slider == velocityASlider || slider == velocityBSlider) {
+            property = "velocity";
+        } else {
+            property = "acceleration";
+        }
+        
+        switch (property) {
+            case "position" -> entity.setPosition(value);
+            case "velocity" -> entity.setVelocity(value);
+            case "acceleration" -> entity.setAcceleration(value);
+        }
     }
 }
