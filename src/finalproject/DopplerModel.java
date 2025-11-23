@@ -78,6 +78,10 @@ public class DopplerModel {
             observedFrequency = sourceFrequency * (velocityWave + observerVelocity) / (velocityWave + sourceVelocity);
         }
         
+        if (observedFrequency < 0) { // Observer moving away faster than speed of sound
+            observedFrequency = 0; // Equation predicts negative observed frequency, IRL observed frequency = 0
+        }
+        
         observer.setObservedFrequency(observedFrequency);
     }
 
