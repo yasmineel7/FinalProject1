@@ -29,7 +29,10 @@ import javafx.scene.input.MouseEvent;
  * @author Yasmine and Jacques
  */
 public class FinalProjectController implements Initializable {
-    private LineChart[] charts = new LineChart[2];
+    LineChart<Number, Number> frequencyChartA;
+    LineChart<Number, Number> frequencyChartB;
+    LineChart<Number, Number> pressureChartA;
+    LineChart<Number, Number> pressureChartB;
     
     @FXML
     private HBox graphHBox;
@@ -40,48 +43,53 @@ public class FinalProjectController implements Initializable {
     }
     
     /**
-     * Initializes the frequency charts to the charts variable, including axis and series.
+     * Initializes all relevant charts with chart title and axis titles
      */
-    public void initializeCharts() {
-        for (int i = 0; i < 2; i++) {
-            NumberAxis timeAxis = new NumberAxis(); timeAxis.setLabel("Time (s)");
-            NumberAxis frequencyAxis = new NumberAxis(); frequencyAxis.setLabel("Frequency (Hz)");
-            
-            LineChart lineChart = new LineChart(timeAxis, frequencyAxis);
-            lineChart.setTitle("Frequency Observed by " + (char)(65 + i));
-            lineChart.setCreateSymbols(false);
-            lineChart.setLegendVisible(false);
-            
-            Series series = new XYChart.Series<>();
-            
-            lineChart.getData().add(series);
-            
-            charts[i] = lineChart;
-            graphHBox.getChildren().add(lineChart);
-        }
+    private void initializeCharts() {
+        frequencyChartA = createChart("Frequency Observed by A", "Time (s)", "Frequency (Hz)");
+        frequencyChartB = createChart("Frequency Observed by B", "Time (s)", "Frequency (Hz)");
+        pressureChartA = createChart("Pressure Observed by A", "Time (s)", "Pressure (kPa)");
+        pressureChartB = createChart("Pressure Observed by B", "Time (s)", "Pressure (kPa)");
         
-        for (int i = 0; i < 2; i++) {
-            NumberAxis timeAxis = new NumberAxis(); timeAxis.setLabel("Time (s)");
-            NumberAxis pressureAxis = new NumberAxis(); pressureAxis.setLabel("Pressure (kPa)");
-            
-            LineChart lineChart = new LineChart(timeAxis, pressureAxis);
-            lineChart.setTitle("Pressure observed by " + (char)(65 + i));
-            lineChart.setCreateSymbols(false);
-            lineChart.setLegendVisible(false);
-            
-            Series series = new XYChart.Series<>();
-            
-            lineChart.getData().add(series);
-            
-            charts[i] = lineChart;
-            graphHBox.getChildren().add(lineChart);
-        }
+        graphHBox.getChildren().addAll(frequencyChartA, frequencyChartB, pressureChartA, pressureChartB);
     }
     
-    public void addPoint(int chartIndex, double time, double frequency) {
-        Series series = (Series) charts[chartIndex].getData().get(0);
-        series.getData().add(new XYChart.Data<>(time, frequency));
+    /**
+     * Creates a chart with specified title and axis titles
+     * @param title The title of the chart
+     * @param xAxisLabel The x-axis label
+     * @param yAxisLabel the y-axis label
+     * @return The created chart
+     */
+    private LineChart<Number, Number> createChart(String title, String xAxisLabel, String yAxisLabel) {
+        NumberAxis xAxis = new NumberAxis();
+        xAxis.setLabel(xAxisLabel);
+        
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel(yAxisLabel);
+        
+        LineChart<Number, Number> lineChart = new LineChart(xAxis, yAxis);
+        lineChart.setTitle(title);
+        lineChart.setCreateSymbols(false);
+        lineChart.setLegendVisible(false);
+        
+        Series<Number, Number> series = new XYChart.Series<>();
+        lineChart.getData().add(series);
+        
+        return lineChart;
     }
+    
+    /**
+     * Adds a point P(x, y) to a chart
+     * @param lineChart The chart to which the point should be added
+     * @param x The x value of the point
+     * @param y The y value of the point
+     */
+    public void addPoint(LineChart lineChart, double x, double y) {
+        Series<Number, Number> series = (Series<Number, Number>) lineChart.getData().get(0);
+        series.getData().add(new XYChart.Data<Number, Number>(x, y));
+    }
+    
      @FXML
     private TitledPane entityBTitlePane, entityATitlePane;
 
