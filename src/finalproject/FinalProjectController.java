@@ -36,7 +36,7 @@ import javafx.scene.shape.Rectangle;
  * @author Yasmine and Jacques
  */
 public class FinalProjectController implements Initializable {
-    DopplerModel model = new DopplerModel();
+    DopplerModel model;
     
     LineChart<Number, Number> frequencyChartA;
     LineChart<Number, Number> frequencyChartB;
@@ -53,20 +53,32 @@ public class FinalProjectController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Used for testing, can be removed
-        model.getEntityA().setSourceFrequency(50);
-        model.getEntityB().setSourceFrequency(50);
-        
+        initializeModel();
         initializeCharts();
-        adjustPreferredSizes();
+        initializeUIProperties();
+        
+        scenePane.setMouseTransparent(true);
+        scenePane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            model.getEntityA().setMaxPosition(scenePane.getWidth() - truckA.getWidth());
+            model.getEntityB().setMaxPosition(scenePane.getWidth() - truckB.getWidth());
+        });
         
         startSimulation();
+        
+    }
+    
+    private void initializeModel() {
+        double speedOfSound = 343;
+        Entity entityA = new Entity(0, 0, 0, 50);
+        Entity entityB = new Entity(800, 0, 0, 100);
+        
+        model = new DopplerModel(speedOfSound, entityB, entityA, 0);
     }
     
     /**
      * Adjusts various UI element's sizing
      */
-    private void adjustPreferredSizes() {
+    private void initializeUIProperties() {
         grass.layoutYProperty().bind(scenePane.heightProperty().subtract(grass.getHeight()));
         grass.widthProperty().bind(scenePane.widthProperty());
         
