@@ -7,6 +7,7 @@ package finalproject;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
@@ -26,6 +27,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 
 /**
@@ -47,6 +49,7 @@ public class FinalProjectController implements Initializable {
     @FXML private VBox entityPropertiesVBox;
     @FXML private Slider positionASlider, positionBSlider, velocityASlider, velocityBSlider, accelerationASlider, accelerationBSlider;
     @FXML private Pane scenePane;
+    @FXML private Rectangle grass;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -64,7 +67,15 @@ public class FinalProjectController implements Initializable {
      * Adjusts various UI element's sizing
      */
     private void adjustPreferredSizes() {
+        grass.layoutYProperty().bind(scenePane.heightProperty().subtract(grass.getHeight()));
+        grass.widthProperty().bind(scenePane.widthProperty());
+        
         graphHBox.prefHeightProperty().bind(root.heightProperty().multiply(0.33));
+        
+        Platform.runLater(() -> { // runLater() since the trucks are panes with initial height 0 (they get calculated "later")
+            truckA.layoutYProperty().bind(grass.layoutYProperty().subtract(truckA.getHeight()));
+            truckB.layoutYProperty().bind(grass.layoutYProperty().subtract(truckB.getHeight()));
+        });
     }
     
     /**
@@ -113,6 +124,7 @@ public class FinalProjectController implements Initializable {
      * Updates the LayoutX of the trucks based on the positions of the model's entities
      */
     private void updateTrucks() {
+        // Not using bind since that would technically violate MVC, but bind would be much better
         truckA.setLayoutX(model.getEntityA().getPosition());
         truckB.setLayoutX(model.getEntityB().getPosition());
     }
@@ -121,6 +133,7 @@ public class FinalProjectController implements Initializable {
      * Updates the sliders based on the entity's kinematic properties
      */
     private void updateSliders() {
+        // Not using bind since that would technically violate MVC, but bind would be much better
         Entity entityA = model.getEntityA();
         Entity entityB = model.getEntityB();
         
