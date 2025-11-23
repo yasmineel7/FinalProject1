@@ -184,7 +184,6 @@ public class FinalProjectController implements Initializable {
         double value = slider.getValue();
         
         Entity entity;
-        String property;
         
         if (slider == positionASlider || slider == velocityASlider || slider == accelerationASlider) {
             entity = model.getEntityA();
@@ -193,17 +192,11 @@ public class FinalProjectController implements Initializable {
         }
         
         if (slider == positionASlider || slider == positionBSlider) {
-            property = "position";
+            entity.setPosition(value);
         } else if (slider == velocityASlider || slider == velocityBSlider) {
-            property = "velocity";
+            entity.setVelocity(value);
         } else {
-            property = "acceleration";
-        }
-        
-        switch (property) {
-            case "position" -> entity.setPosition(value);
-            case "velocity" -> entity.setVelocity(value);
-            case "acceleration" -> entity.setAcceleration(value);
+            entity.setAcceleration(value);
         }
     }
 }
