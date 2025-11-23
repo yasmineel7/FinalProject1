@@ -21,6 +21,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 
 /**
@@ -36,10 +40,33 @@ public class FinalProjectController implements Initializable {
     
     @FXML
     private HBox graphHBox;
+    @FXML
+    private BorderPane root;
+    @FXML
+    private Pane truckA;
+    @FXML
+    private Pane truckB;
+    @FXML
+    private VBox entityPropertiesVBox;
+    @FXML
+    private TitledPane entityATitledPane;
+    @FXML
+    private TitledPane entityBTitledPane;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initializeCharts();
+        adjustPreferredSizes();
+    }
+    
+    /**
+     * Adjusts various UI element's sizing
+     */
+    private void adjustPreferredSizes() {
+        VBox.setVgrow(entityPropertiesVBox, Priority.ALWAYS);
+        
+        VBox.setVgrow(graphHBox, Priority.ALWAYS);
+        graphHBox.prefHeightProperty().bind(root.heightProperty().multiply(0.33));
     }
     
     /**
@@ -85,16 +112,11 @@ public class FinalProjectController implements Initializable {
      * @param x The x value of the point
      * @param y The y value of the point
      */
-    public void addPoint(LineChart lineChart, double x, double y) {
+    private void addPoint(LineChart lineChart, double x, double y) {
         Series<Number, Number> series = (Series<Number, Number>) lineChart.getData().get(0);
         series.getData().add(new XYChart.Data<Number, Number>(x, y));
     }
     
-     @FXML
-    private TitledPane entityBTitlePane, entityATitlePane;
-
-    @FXML
-    private Label accelerationALabel, accelerationBLabel, positionALabel, positionBLabel, velocityALabel, velocityBLabel;
 
     @FXML
     private Slider accelerationASlider, accelerationBSlider, positionASlider, positionBSlider, velocityASlider, velocityBSlider;

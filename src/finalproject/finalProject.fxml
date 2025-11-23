@@ -7,67 +7,59 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.shape.Circle?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="finalproject.FinalProjectController">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="finalproject.FinalProjectController">
    <left>
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="8.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="entityPropertiesVBox" spacing="8.0" BorderPane.alignment="CENTER">
          <children>
-            <TitledPane fx:id="entityATitlePane" animated="false" text="EntityA">
+            <TitledPane fx:id="entityATitledPane" animated="false" maxHeight="1.7976931348623157E308" text="EntityA">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="85.0" prefWidth="75.0">
+                  <VBox>
                      <children>
-                        <Label fx:id="accelerationALabel" text="Acceleration: " />
-                        <Slider fx:id="accelerationASlider" layoutY="17.0" majorTickUnit="10.0" max="50.0" onMouseReleased="#handleAccelerationA" prefHeight="39.0" prefWidth="83.0" showTickLabels="true" showTickMarks="true" />
-                        <Label fx:id="velocityALabel" layoutX="12.0" layoutY="56.0" text="Velocity: " />
-                        <Slider fx:id="velocityASlider" layoutX="1.0" layoutY="73.0" majorTickUnit="10.0" max="50.0" onMouseReleased="#handleVelocityA" prefHeight="39.0" prefWidth="82.0" showTickLabels="true" showTickMarks="true" />
-                        <Label fx:id="positionALabel" layoutX="2.0" layoutY="104.0" prefHeight="0.0" prefWidth="49.0" text="Position: " />
-                        <Slider fx:id="positionASlider" layoutX="-3.0" layoutY="120.0" majorTickUnit="50.0" max="200.0" onMouseReleased="#handlePositionA" prefHeight="42.0" prefWidth="92.0" showTickLabels="true" showTickMarks="true" />
+                        <Label text="Acceleration: " />
+                        <Slider fx:id="accelerationASlider" majorTickUnit="10.0" max="50.0" onMouseReleased="#handleAccelerationA" prefHeight="39.0" showTickLabels="true" showTickMarks="true" />
+                        <Label text="Velocity: " />
+                        <Slider fx:id="velocityASlider" majorTickUnit="10.0" max="50.0" onMouseReleased="#handleVelocityA" prefHeight="39.0" prefWidth="82.0" showTickLabels="true" showTickMarks="true" />
+                        <Label text="Position: " />
+                        <Slider fx:id="positionASlider" majorTickUnit="50.0" max="200.0" onMouseReleased="#handlePositionA" prefHeight="42.0" prefWidth="92.0" showTickLabels="true" showTickMarks="true" />
                      </children>
-                  </AnchorPane>
+                  </VBox>
               </content>
-               <padding>
-                  <Insets bottom="8.0" left="5.0" right="8.0" top="8.0" />
-               </padding>
                <VBox.margin>
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </TitledPane>
-            <TitledPane fx:id="entityBTitlePane" animated="false" text="Entity B">
+            <TitledPane fx:id="entityBTitledPane" animated="false" maxHeight="1.7976931348623157E308" text="Entity B">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="259.0" prefWidth="94.0">
+                  <VBox>
                      <children>
-                        <Label fx:id="accelerationBLabel" text="Acceleration: " />
-                        <Slider fx:id="accelerationBSlider" layoutY="17.0" majorTickUnit="10.0" max="50.0" onMouseReleased="#handleAccelerationB" prefHeight="34.0" prefWidth="94.0" showTickLabels="true" showTickMarks="true" />
-                        <Label fx:id="velocityBLabel" layoutX="4.0" layoutY="47.0" text="Velocity:" />
-                        <Slider fx:id="velocityBSlider" layoutX="2.0" layoutY="64.0" majorTickUnit="10.0" max="50.0" onMouseReleased="#handleVelocityB" prefHeight="40.0" prefWidth="90.0" showTickLabels="true" showTickMarks="true" />
-                        <Label fx:id="positionBLabel" layoutX="2.0" layoutY="104.0" text="Position: " />
-                        <Slider fx:id="positionBSlider" layoutX="2.0" layoutY="119.0" majorTickUnit="50.0" max="200.0" onMouseReleased="#hundlePositionB" prefHeight="39.0" prefWidth="93.0" showTickLabels="true" showTickMarks="true" />
+                        <Label text="Acceleration: " />
+                        <Slider fx:id="accelerationBSlider" majorTickUnit="10.0" max="50.0" onMouseReleased="#handleAccelerationB" prefHeight="34.0" prefWidth="94.0" showTickLabels="true" showTickMarks="true" />
+                        <Label text="Velocity:" />
+                        <Slider fx:id="velocityBSlider" majorTickUnit="10.0" max="50.0" onMouseReleased="#handleVelocityB" prefHeight="40.0" prefWidth="90.0" showTickLabels="true" showTickMarks="true" />
+                        <Label text="Position: " />
+                        <Slider fx:id="positionBSlider" majorTickUnit="50.0" max="200.0" onMouseReleased="#hundlePositionB" prefHeight="39.0" prefWidth="93.0" showTickLabels="true" showTickMarks="true" />
                      </children>
-                  </AnchorPane>
+                  </VBox>
               </content>
             </TitledPane>
-         </children>
-         <padding>
-            <Insets bottom="10.0" left="2.0" right="2.0" top="10.0" />
-         </padding></VBox>
+         </children></VBox>
    </left>
    <bottom>
-      <HBox fx:id="graphHBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="8.0" BorderPane.alignment="CENTER" />
+      <HBox fx:id="graphHBox" spacing="8.0" BorderPane.alignment="CENTER" />
    </bottom>
    <center>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Pane fx:id="truckA">
+            <Pane fx:id="truckA" layoutX="352.0" layoutY="162.0">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="80.0" />
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" layoutX="77.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
@@ -80,7 +72,7 @@
                   </Text>
                </children>
             </Pane>
-            <Pane fx:id="truckB" layoutX="200.0">
+            <Pane fx:id="truckB" layoutX="553.0" layoutY="162.0">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="60.0" />
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="20.0" layoutX="57.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="15.0" />
