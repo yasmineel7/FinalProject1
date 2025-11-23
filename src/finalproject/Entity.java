@@ -15,12 +15,19 @@ public class Entity {
     private double sourceFrequency;
     private double observedFrequency;
 
-    public Entity(double position, double velocity, double acceleration, double sourceFrequency, double observedFrequency) {
+    public Entity() {
+        
+    }
+    
+    public Entity(double sourceFrequency) {
+        this.sourceFrequency = sourceFrequency;
+    }
+    
+    public Entity(double position, double velocity, double acceleration, double sourceFrequency) {
         this.position = position;
         this.velocity = velocity;
         this.acceleration = acceleration;
         this.sourceFrequency = sourceFrequency;
-        this.observedFrequency = observedFrequency;
     }
 
     public double getPosition() {
