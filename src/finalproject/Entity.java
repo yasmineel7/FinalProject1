@@ -12,8 +12,11 @@ public class Entity {
     private double position;
     private double velocity;
     private double acceleration;
+    
     private double sourceFrequency;
     private double observedFrequency;
+    
+    private double maxPosition = Double.MAX_VALUE;
 
     public Entity() {
         
@@ -35,7 +38,7 @@ public class Entity {
     }
 
     public void setPosition(double position) {
-        this.position = position;
+        this.position = Math.max(0, Math.min(position, maxPosition));
     }
 
     public double getVelocity() {
@@ -68,6 +71,14 @@ public class Entity {
 
     public void setObservedFrequency(double observedFrequency) {
         this.observedFrequency = observedFrequency;
+    }
+
+    public double getMaxPosition() {
+        return maxPosition;
+    }
+
+    public void setMaxPosition(double maxPosition) {
+        this.maxPosition = maxPosition;
     }
 
     @Override
