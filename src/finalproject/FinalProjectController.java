@@ -46,6 +46,7 @@ public class FinalProjectController implements Initializable {
     @FXML private Pane truckA, truckB;
     @FXML private VBox entityPropertiesVBox;
     @FXML private Slider positionASlider, positionBSlider, velocityASlider, velocityBSlider, accelerationASlider, accelerationBSlider;
+    @FXML private Pane scenePane;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -63,9 +64,6 @@ public class FinalProjectController implements Initializable {
      * Adjusts various UI element's sizing
      */
     private void adjustPreferredSizes() {
-        VBox.setVgrow(entityPropertiesVBox, Priority.ALWAYS);
-        
-        VBox.setVgrow(graphHBox, Priority.ALWAYS);
         graphHBox.prefHeightProperty().bind(root.heightProperty().multiply(0.33));
     }
     
