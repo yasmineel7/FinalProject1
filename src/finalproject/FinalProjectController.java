@@ -36,6 +36,7 @@ import javafx.scene.layout.VBox;
 public class FinalProjectController implements Initializable {
     DopplerModel model = new DopplerModel();
     
+
     LineChart<Number, Number> frequencyChartA;
     LineChart<Number, Number> frequencyChartB;
     LineChart<Number, Number> pressureChartA;
@@ -46,6 +47,28 @@ public class FinalProjectController implements Initializable {
     @FXML private Pane truckA, truckB;
     @FXML private VBox entityPropertiesVBox;
     @FXML private Slider positionASlider, positionBSlider, velocityASlider, velocityBSlider, accelerationASlider, accelerationBSlider;
+
+    
+    //Entity variables
+    double velocity = 20; //variable to change
+    double time = 100; //variable to change
+    Entity entityA;
+    Entity entityB;
+    
+    DopplerModel model = new DopplerModel(velocity, entityA, entityB, time);
+    
+    @FXML
+    private HBox graphHBox;
+
+    
+    @FXML
+    private TitledPane entityBTitlePane, entityATitlePane;
+
+    @FXML
+    private Label accelerationALabel, accelerationBLabel, positionALabel, positionBLabel, velocityALabel, velocityBLabel;
+
+    @FXML
+    private Slider accelerationASlider, accelerationBSlider, positionASlider, positionBSlider, velocityASlider, velocityBSlider;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -54,9 +77,21 @@ public class FinalProjectController implements Initializable {
         model.getEntityB().setSourceFrequency(50);
         
         initializeCharts();
+
         adjustPreferredSizes();
         
         startSimulation();
+        double position = 5;
+        double velocity = 20;
+        double acceleration = 3;
+        double observedFrequency = 20;
+        double sourceFrequency1 = 10;
+        double sourcefrequency2 = 0;
+        entityA = new Entity(position, velocity, acceleration, 0, 20);
+        entityB = new Entity(position, velocity, acceleration, sourceFrequency1, observedFrequency);
+        
+        model.update(time);
+
     }
     
     /**
@@ -199,4 +234,66 @@ public class FinalProjectController implements Initializable {
             entity.setAcceleration(value);
         }
     }
+
+
+    
+    public void addPoint(int chartIndex, double time, double frequency) {
+        Series series = (Series) charts[chartIndex].getData().get(0);
+        series.getData().add(new XYChart.Data<>(time, frequency));
+    } 
+ 
+    /**
+     * handle the velocity of the entity B
+     * @param event the mouseEvent
+     */
+    @FXML
+    public void handleVelocityB(MouseEvent event) {
+        entityB.setVelocity((double) velocityBSlider.getValue());
+    }
+    
+    /**
+     * handle the velocity of entity A
+     * @param event the mouseEvent
+     */
+     @FXML
+    void handleVelocityA(MouseEvent event) {
+        entityA.setVelocity((double) velocityASlider.getValue());
+    }
+    
+    /**
+     * handle the acceleration of entity A
+     * @param event the mouseEvent
+     */
+     @FXML
+    void handleAccelerationA(MouseEvent event) {
+        entityA.setAcceleration((double) accelerationASlider.getValue());
+    }
+
+    /**
+     * handle the acceleration of entity B
+     * @param event the mouseEvent
+     */
+    @FXML
+    void handleAccelerationB(MouseEvent event) {
+        entityB.setAcceleration((double) accelerationBSlider.getValue());
+    }
+
+    /**
+     * handle the position of entity A
+     * @param event 
+     */
+    @FXML
+    void handlePositionA(MouseEvent event) {
+        entityA.setPosition((double) positionASlider.getValue());
+    }
+
+    /**
+     * handle the position of entity B
+     * @param event 
+     */
+    @FXML
+    void hundlePositionB(MouseEvent event) {
+        entityB.setPosition((double) positionBSlider.getValue());
+    }
+
 }
