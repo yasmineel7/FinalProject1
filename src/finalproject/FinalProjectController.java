@@ -19,6 +19,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TitledPane;
@@ -61,6 +62,9 @@ public class FinalProjectController implements Initializable {
 
     @FXML
     private Label accelerationALabel, accelerationBLabel, positionALabel, positionBLabel, velocityALabel, velocityBLabel;
+    
+    @FXML
+    private Button resetButton;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -225,9 +229,15 @@ public class FinalProjectController implements Initializable {
         }
     }
     
+    /**
+     * handle the button reset
+     * @param event the action event
+     */
     @FXML
     void handleReset(ActionEvent event) {
-        frequencyChartA
+        truckA.setLayoutX(0);
+        truckB.setLayoutX(800);
+        
     }
 
     /**
