@@ -46,7 +46,7 @@
                         <Label text="Velocity:" />
                         <Slider fx:id="velocityBSlider" majorTickUnit="10.0" min="-100.0" onMouseDragged="#handleSlider" showTickLabels="true" showTickMarks="true" />
                         <Label text="Position: " />
-                        <Slider fx:id="positionBSlider" majorTickUnit="200.0" max="1000.0" onMouseDragged="#handleSlider" showTickLabels="true" showTickMarks="true" />
+                        <Slider fx:id="positionBSlider" majorTickUnit="200.0" max="1000.0" minorTickCount="0" onMouseDragged="#handleSlider" showTickLabels="true" showTickMarks="true" />
                      </children>
                   </VBox>
               </content>

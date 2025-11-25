@@ -61,6 +61,8 @@ public class FinalProjectController implements Initializable {
         scenePane.widthProperty().addListener((obs, oldVal, newVal) -> {
             model.getEntityA().setMaxPosition(scenePane.getWidth() - truckA.getWidth());
             model.getEntityB().setMaxPosition(scenePane.getWidth() - truckB.getWidth());
+            positionASlider.setMax(model.getEntityA().getMaxPosition());
+            positionBSlider.setMax(model.getEntityB().getMaxPosition());
         });
         
         startSimulation();
