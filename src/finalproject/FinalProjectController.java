@@ -16,6 +16,7 @@ import javafx.scene.chart.XYChart.Series;
 import javafx.scene.layout.HBox;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -223,14 +224,12 @@ public class FinalProjectController implements Initializable {
             entity.setAcceleration(value);
         }
     }
-
-
     
-    public void addPoint(int chartIndex, double time, double frequency) {
-        Series series = (Series) charts[chartIndex].getData().get(0);
-        series.getData().add(new XYChart.Data<>(time, frequency));
-    } 
- 
+    @FXML
+    void handleReset(ActionEvent event) {
+        frequencyChartA
+    }
+
     /**
      * handle the velocity of the entity B
      * @param event the mouseEvent
