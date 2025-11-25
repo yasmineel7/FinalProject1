@@ -55,20 +55,11 @@ public class FinalProjectController implements Initializable {
     Entity entityA;
     Entity entityB;
     
-    DopplerModel model = new DopplerModel(velocity, entityA, entityB, time);
-    
-    @FXML
-    private HBox graphHBox;
-
-    
     @FXML
     private TitledPane entityBTitlePane, entityATitlePane;
 
     @FXML
     private Label accelerationALabel, accelerationBLabel, positionALabel, positionBLabel, velocityALabel, velocityBLabel;
-
-    @FXML
-    private Slider accelerationASlider, accelerationBSlider, positionASlider, positionBSlider, velocityASlider, velocityBSlider;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -87,8 +78,6 @@ public class FinalProjectController implements Initializable {
         double observedFrequency = 20;
         double sourceFrequency1 = 10;
         double sourcefrequency2 = 0;
-        entityA = new Entity(position, velocity, acceleration, 0, 20);
-        entityB = new Entity(position, velocity, acceleration, sourceFrequency1, observedFrequency);
         
         model.update(time);
 
@@ -292,7 +281,7 @@ public class FinalProjectController implements Initializable {
      * @param event 
      */
     @FXML
-    void hundlePositionB(MouseEvent event) {
+    void handlePositionB(MouseEvent event) {
         entityB.setPosition((double) positionBSlider.getValue());
     }
 
