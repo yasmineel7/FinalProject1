@@ -5,8 +5,15 @@
 package finalproject;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,7 +34,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 
 /**
@@ -111,6 +121,9 @@ public class FinalProjectController implements Initializable {
         AnimationTimer timer = new AnimationTimer() {
             private long lastTime = -1;
             
+            private double timeSinceLastSoundWave = 0;
+            private double soundWaveInterval = 0.3;
+            
             @Override
             public void handle(long now) {
                 if (lastTime < 0) {
@@ -118,6 +131,14 @@ public class FinalProjectController implements Initializable {
                 }
                 
                 double dt = (now - lastTime) / 1e9; // now and lastTime in nanoseconds, dt in seconds
+                
+                timeSinceLastSoundWave += dt;
+                if (timeSinceLastSoundWave > soundWaveInterval) {
+                    timeSinceLastSoundWave = 0;
+                    
+                    createSoundWave(model.getEntityA());
+//                    createSoundWave(model.getEntityB());
+                }
                 
                 model.update(dt);
                 
@@ -132,6 +153,41 @@ public class FinalProjectController implements Initializable {
         };
         
         timer.start();
+    }
+    
+    private void createSoundWave(Entity originator) {
+        Pane truck = getTruckFromEntity(originator);
+        
+        double centerX = originator.getPosition() + truck.getWidth() / 2;
+        double centerY = truck.getLayoutY() + truck.getHeight() / 2;
+        
+        double animationLength = 1;
+        
+        Circle soundWave = new Circle(centerX, centerY, 0, Color.TRANSPARENT);
+        soundWave.setStroke(Color.BLUE);
+        soundWave.setStrokeWidth(3);
+        
+        FadeTransition fade = new FadeTransition(Duration.seconds(animationLength), soundWave);
+        fade.setFromValue(1);
+        fade.setToValue(0);
+        
+        Timeline size = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(soundWave.radiusProperty(), 0)),
+                new KeyFrame(Duration.seconds(animationLength), new KeyValue(soundWave.radiusProperty(), animationLength * model.getVelocityWave()))
+        );
+        
+        ParallelTransition pt = new ParallelTransition(fade, size);
+        pt.play();
+        
+        scenePane.getChildren().add(soundWave);
+    }
+    
+    private Pane getTruckFromEntity(Entity entity) {
+        if (entity == model.getEntityA()) {
+            return truckA;
+        }
+        
+        return truckB;
     }
     
     /**
