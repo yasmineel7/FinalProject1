@@ -31,7 +31,10 @@ public class FinalProject extends Application {
         
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setMinWidth(1200);
+        stage.setMinHeight(800);
         stage.setTitle("Doppler Effect Simulation");
+        
         stage.show();
         }
         catch (IOException e) {

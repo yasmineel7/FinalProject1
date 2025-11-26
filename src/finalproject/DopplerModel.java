@@ -52,7 +52,14 @@ public class DopplerModel {
      * @param dt Delta-time: the time since the last update
      */
     private void updateKinematicState(Entity entity, double dt) {
-        entity.setVelocity(entity.getVelocity() + entity.getAcceleration() * dt);
+        if (entity.getPosition() == 0 && entity.getVelocity() < 0) {
+            entity.setVelocity(0);
+        } else if (entity.getPosition() == entity.getMaxPosition() && entity.getVelocity() > 0) {
+            entity.setVelocity(0);
+        } else {
+            entity.setVelocity(entity.getVelocity() + entity.getAcceleration() * dt);
+        }
+        
         entity.setPosition(entity.getPosition() + entity.getVelocity() * dt);
     }
     
