@@ -255,11 +255,8 @@ public class FinalProjectController implements Initializable {
         model.setTime(0);
         
         //set the graphs
-//        ObservableList<XYChart.Series<Number, Number>> seriesList = frequencyChartB.getData();
-        //series = (Series<Number, Number>) lineChart.getData().get(0);
-        //series.getData().clear();
-        Series<Number, Number> series = (Series<Number, Number>) frequencyChartA.getData().get(0);
-        series.getData().clear();
+        Series<Number, Number> seriesA = (Series<Number, Number>) frequencyChartA.getData().get(0);
+        seriesA.getData().clear();
         
         Series<Number, Number> seriesB = (Series<Number, Number>) frequencyChartB.getData().get(0);
         seriesB.getData().clear();
