@@ -40,7 +40,6 @@ import javafx.scene.shape.Rectangle;
 public class FinalProjectController implements Initializable {
     DopplerModel model;
     
-
     LineChart<Number, Number> frequencyChartA;
     LineChart<Number, Number> frequencyChartB;
     LineChart<Number, Number> pressureChartA;
@@ -227,70 +226,4 @@ public class FinalProjectController implements Initializable {
             entity.setAcceleration(value);
         }
     }
-    
-    /**
-     * handle the button reset
-     * @param event the action event
-     */
-    @FXML
-    void handleReset(ActionEvent event) {
-        truckA.setLayoutX(0);
-        truckB.setLayoutX(800);
-        
-    }
-
-    /**
-     * handle the velocity of the entity B
-     * @param event the mouseEvent
-     */
-    @FXML
-    public void handleVelocityB(MouseEvent event) {
-        entityB.setVelocity((double) velocityBSlider.getValue());
-    }
-    
-    /**
-     * handle the velocity of entity A
-     * @param event the mouseEvent
-     */
-     @FXML
-    void handleVelocityA(MouseEvent event) {
-        entityA.setVelocity((double) velocityASlider.getValue());
-    }
-    
-    /**
-     * handle the acceleration of entity A
-     * @param event the mouseEvent
-     */
-     @FXML
-    void handleAccelerationA(MouseEvent event) {
-        entityA.setAcceleration((double) accelerationASlider.getValue());
-    }
-
-    /**
-     * handle the acceleration of entity B
-     * @param event the mouseEvent
-     */
-    @FXML
-    void handleAccelerationB(MouseEvent event) {
-        entityB.setAcceleration((double) accelerationBSlider.getValue());
-    }
-
-    /**
-     * handle the position of entity A
-     * @param event 
-     */
-    @FXML
-    void handlePositionA(MouseEvent event) {
-        entityA.setPosition((double) positionASlider.getValue());
-    }
-
-    /**
-     * handle the position of entity B
-     * @param event 
-     */
-    @FXML
-    void handlePositionB(MouseEvent event) {
-        entityB.setPosition((double) positionBSlider.getValue());
-    }
-
 }
