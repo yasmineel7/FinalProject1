@@ -38,7 +38,6 @@ import javafx.scene.shape.Rectangle;
 public class FinalProjectController implements Initializable {
     DopplerModel model;
     
-
     LineChart<Number, Number> frequencyChartA;
     LineChart<Number, Number> frequencyChartB;
     LineChart<Number, Number> pressureChartA;
@@ -225,66 +224,4 @@ public class FinalProjectController implements Initializable {
             entity.setAcceleration(value);
         }
     }
-
-
-    
-    public void addPoint(int chartIndex, double time, double frequency) {
-        Series series = (Series) charts[chartIndex].getData().get(0);
-        series.getData().add(new XYChart.Data<>(time, frequency));
-    } 
- 
-    /**
-     * handle the velocity of the entity B
-     * @param event the mouseEvent
-     */
-    @FXML
-    public void handleVelocityB(MouseEvent event) {
-        entityB.setVelocity((double) velocityBSlider.getValue());
-    }
-    
-    /**
-     * handle the velocity of entity A
-     * @param event the mouseEvent
-     */
-     @FXML
-    void handleVelocityA(MouseEvent event) {
-        entityA.setVelocity((double) velocityASlider.getValue());
-    }
-    
-    /**
-     * handle the acceleration of entity A
-     * @param event the mouseEvent
-     */
-     @FXML
-    void handleAccelerationA(MouseEvent event) {
-        entityA.setAcceleration((double) accelerationASlider.getValue());
-    }
-
-    /**
-     * handle the acceleration of entity B
-     * @param event the mouseEvent
-     */
-    @FXML
-    void handleAccelerationB(MouseEvent event) {
-        entityB.setAcceleration((double) accelerationBSlider.getValue());
-    }
-
-    /**
-     * handle the position of entity A
-     * @param event 
-     */
-    @FXML
-    void handlePositionA(MouseEvent event) {
-        entityA.setPosition((double) positionASlider.getValue());
-    }
-
-    /**
-     * handle the position of entity B
-     * @param event 
-     */
-    @FXML
-    void hundlePositionB(MouseEvent event) {
-        entityB.setPosition((double) positionBSlider.getValue());
-    }
-
 }
