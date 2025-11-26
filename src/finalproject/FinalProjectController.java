@@ -48,6 +48,8 @@ public class FinalProjectController implements Initializable {
     LineChart<Number, Number> pressureChartB;
     
     AnimationTimer timer;
+    boolean paused = false;
+
     
     @FXML private BorderPane root;
     @FXML private HBox graphHBox;
@@ -110,7 +112,7 @@ public class FinalProjectController implements Initializable {
         
         graphHBox.getChildren().addAll(frequencyChartA, frequencyChartB, pressureChartA, pressureChartB);
     }
-    
+        
     /**
      * Starts the simulation, updating the model and UI elements with respect to FPS
      */
@@ -120,8 +122,9 @@ public class FinalProjectController implements Initializable {
             
             @Override
             public void handle(long now) {
-                if (lastTime < 0) {
+                if (lastTime < 0 || paused) {
                     lastTime = now;
+                    paused = false;
                 }
                 
                 double dt = (now - lastTime) / 1e9; // now and lastTime in nanoseconds, dt in seconds
@@ -283,6 +286,7 @@ public class FinalProjectController implements Initializable {
     void handlePause(ActionEvent event) {
             timer.stop();
             startButton.setText("Unpause");
+            paused = true;
     }
     
     /**
