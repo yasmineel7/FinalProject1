@@ -160,6 +160,12 @@ public class FinalProjectController implements Initializable {
         timer.start();
     }
     
+    /**
+     * Creates an expanding and fading sound wave based on the position of the
+     * originator of sound
+     * @param originator The originator (source) of the sound
+     * @param color The color of the sound wave
+     */
     private void createSoundWave(Entity originator, Color color) {
         Pane truck = getTruckFromEntity(originator);
         
@@ -187,6 +193,11 @@ public class FinalProjectController implements Initializable {
         scenePane.getChildren().add(soundWave);
     }
     
+    /**
+     * Returns the truck associated with the given entity
+     * @param entity The entity to find the truck from
+     * @return The truck associated with the entity
+     */
     private Pane getTruckFromEntity(Entity entity) {
         if (entity == model.getEntityA()) {
             return truckA;
