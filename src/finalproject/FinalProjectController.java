@@ -17,6 +17,7 @@ import javafx.scene.chart.XYChart.Series;
 import javafx.scene.layout.HBox;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,6 +31,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 
 
 /**
@@ -45,6 +47,8 @@ public class FinalProjectController implements Initializable {
     LineChart<Number, Number> pressureChartA;
     LineChart<Number, Number> pressureChartB;
     
+    AnimationTimer timer;
+    
     @FXML private BorderPane root;
     @FXML private HBox graphHBox;
     @FXML private Pane truckA, truckB;
@@ -52,6 +56,7 @@ public class FinalProjectController implements Initializable {
     @FXML private Slider positionASlider, positionBSlider, velocityASlider, velocityBSlider, accelerationASlider, accelerationBSlider;
     @FXML private Pane scenePane;
     @FXML private Rectangle grass;
+    @FXML private Button startButton, pauseButton, exitButton, resetButton;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -110,7 +115,7 @@ public class FinalProjectController implements Initializable {
      * Starts the simulation, updating the model and UI elements with respect to FPS
      */
     private void startSimulation() {
-        AnimationTimer timer = new AnimationTimer() {
+         timer = new AnimationTimer() {
             private long lastTime = -1;
             
             @Override
@@ -226,4 +231,71 @@ public class FinalProjectController implements Initializable {
             entity.setAcceleration(value);
         }
     }
+    
+    /**
+     * handle the button reset
+     * @param event the action event
+     */
+    @FXML
+    void handleReset(ActionEvent event) {
+        
+        //set the positions
+        model.getEntityA().setPosition(0);
+        model.getEntityB().setPosition(800);
+        
+        //set the accelerations
+        model.getEntityA().setAcceleration(0);
+        model.getEntityB().setAcceleration(0);
+        
+        //set the velocities
+        model.getEntityA().setVelocity(0);
+        model.getEntityB().setVelocity(0);
+        
+        //set the time
+        model.setTime(0);
+        
+        //set the graphs
+//        ObservableList<XYChart.Series<Number, Number>> seriesList = frequencyChartB.getData();
+        //series = (Series<Number, Number>) lineChart.getData().get(0);
+        //series.getData().clear();
+        Series<Number, Number> series = (Series<Number, Number>) frequencyChartA.getData().get(0);
+        series.getData().clear();
+        
+        Series<Number, Number> seriesB = (Series<Number, Number>) frequencyChartB.getData().get(0);
+        seriesB.getData().clear();
+        
+        
+    }
+    
+    /**
+     * handle the exit button
+     * @param event the action event
+     */
+      @FXML
+    void handleExit(ActionEvent event) {
+        timer.stop();
+        Stage stage = (Stage) exitButton.getScene().getWindow();
+        stage.close();
+    }
+
+    /**
+     * handle the pause button
+     * @param event the action event
+     */
+    @FXML
+    void handlePause(ActionEvent event) {
+            timer.stop();
+            startButton.setText("Unpause");
+    }
+    
+    /**
+     * handle the start method
+     * @param event the action event 
+     */
+    @FXML
+    void handleStart(ActionEvent event) {
+        timer.start();
+        startButton.setText("Play");
+    }
+
 }
