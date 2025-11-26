@@ -75,6 +75,11 @@ public class FinalProjectController implements Initializable {
             positionBSlider.setMax(model.getEntityB().getMaxPosition());
         });
         
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(scenePane.widthProperty());
+        clip.heightProperty().bind(scenePane.heightProperty());
+        scenePane.setClip(clip);
+        
         startSimulation();
         
     }
@@ -136,8 +141,8 @@ public class FinalProjectController implements Initializable {
                 if (timeSinceLastSoundWave > soundWaveInterval) {
                     timeSinceLastSoundWave = 0;
                     
-                    createSoundWave(model.getEntityA());
-//                    createSoundWave(model.getEntityB());
+                    createSoundWave(model.getEntityA(), Color.RED);
+                    createSoundWave(model.getEntityB(), Color.BLUE);
                 }
                 
                 model.update(dt);
@@ -155,7 +160,7 @@ public class FinalProjectController implements Initializable {
         timer.start();
     }
     
-    private void createSoundWave(Entity originator) {
+    private void createSoundWave(Entity originator, Color color) {
         Pane truck = getTruckFromEntity(originator);
         
         double centerX = originator.getPosition() + truck.getWidth() / 2;
@@ -164,7 +169,7 @@ public class FinalProjectController implements Initializable {
         double animationLength = 1;
         
         Circle soundWave = new Circle(centerX, centerY, 0, Color.TRANSPARENT);
-        soundWave.setStroke(Color.BLUE);
+        soundWave.setStroke(color);
         soundWave.setStrokeWidth(3);
         
         FadeTransition fade = new FadeTransition(Duration.seconds(animationLength), soundWave);
