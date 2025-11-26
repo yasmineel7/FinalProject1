@@ -176,7 +176,7 @@ public class FinalProjectController implements Initializable {
         
         Circle soundWave = new Circle(centerX, centerY, 0, Color.TRANSPARENT);
         soundWave.setStroke(color);
-        soundWave.setStrokeWidth(3);
+        soundWave.setStrokeWidth(6);
         
         FadeTransition fade = new FadeTransition(Duration.seconds(animationLength), soundWave);
         fade.setFromValue(1);
