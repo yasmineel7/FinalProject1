@@ -207,12 +207,39 @@ public class FinalProjectController implements Initializable {
     }
     
     /**
+     * Returns the entity associated with the given truck
+     * @param truck The truck to find the entity from
+     * @return The entity associated with the truck
+     */
+    private Entity getEntityFromTruck(Pane truck) {
+        if (truck == truckA) {
+            return model.getEntityA();
+        }
+        
+        return model.getEntityB();
+    }
+    
+    /**
      * Updates the LayoutX of the trucks based on the positions of the model's entities
+     * and the orientation of the trucks based on their direction of movement
      */
     private void updateTrucks() {
-        // Not using bind since that would technically violate MVC, but bind would be much better
-        truckA.setLayoutX(model.getEntityA().getPosition());
-        truckB.setLayoutX(model.getEntityB().getPosition());
+        Pane[] trucks = {truckA, truckB};
+        
+        for (Pane truck : trucks) {
+            Entity entity = getEntityFromTruck(truck);
+            
+            truck.setLayoutX(entity.getPosition());
+            
+            if (entity.getVelocity() < 0) {
+                truck.setScaleX(-1);
+                truck.getChildren().getLast().setScaleX(-1);
+            } else {
+                truck.setScaleX(1);
+                truck.getChildren().getLast().setScaleX(1);
+            }
+        }
+        
     }
     
     /**
