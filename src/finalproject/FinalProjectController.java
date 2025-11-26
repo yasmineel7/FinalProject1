@@ -7,6 +7,7 @@ package finalproject;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
@@ -26,6 +27,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 
 /**
@@ -34,7 +36,7 @@ import javafx.scene.layout.VBox;
  * @author Yasmine and Jacques
  */
 public class FinalProjectController implements Initializable {
-    DopplerModel model = new DopplerModel();
+    DopplerModel model;
     
 
     LineChart<Number, Number> frequencyChartA;
@@ -47,61 +49,48 @@ public class FinalProjectController implements Initializable {
     @FXML private Pane truckA, truckB;
     @FXML private VBox entityPropertiesVBox;
     @FXML private Slider positionASlider, positionBSlider, velocityASlider, velocityBSlider, accelerationASlider, accelerationBSlider;
-
-    
-    //Entity variables
-    double velocity = 20; //variable to change
-    double time = 100; //variable to change
-    Entity entityA;
-    Entity entityB;
-    
-    DopplerModel model = new DopplerModel(velocity, entityA, entityB, time);
-    
-    @FXML
-    private HBox graphHBox;
-
-    
-    @FXML
-    private TitledPane entityBTitlePane, entityATitlePane;
-
-    @FXML
-    private Label accelerationALabel, accelerationBLabel, positionALabel, positionBLabel, velocityALabel, velocityBLabel;
-
-    @FXML
-    private Slider accelerationASlider, accelerationBSlider, positionASlider, positionBSlider, velocityASlider, velocityBSlider;
+    @FXML private Pane scenePane;
+    @FXML private Rectangle grass;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Used for testing, can be removed
-        model.getEntityA().setSourceFrequency(50);
-        model.getEntityB().setSourceFrequency(50);
-        
+        initializeModel();
         initializeCharts();
-
-        adjustPreferredSizes();
+        initializeUIProperties();
+        
+        scenePane.setMouseTransparent(true);
+        scenePane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            model.getEntityA().setMaxPosition(scenePane.getWidth() - truckA.getWidth());
+            model.getEntityB().setMaxPosition(scenePane.getWidth() - truckB.getWidth());
+            positionASlider.setMax(model.getEntityA().getMaxPosition());
+            positionBSlider.setMax(model.getEntityB().getMaxPosition());
+        });
         
         startSimulation();
-        double position = 5;
-        double velocity = 20;
-        double acceleration = 3;
-        double observedFrequency = 20;
-        double sourceFrequency1 = 10;
-        double sourcefrequency2 = 0;
-        entityA = new Entity(position, velocity, acceleration, 0, 20);
-        entityB = new Entity(position, velocity, acceleration, sourceFrequency1, observedFrequency);
         
-        model.update(time);
-
+    }
+    
+    private void initializeModel() {
+        double speedOfSound = 343;
+        Entity entityA = new Entity(0, 0, 0, 50);
+        Entity entityB = new Entity(800, 0, 0, 100);
+        
+        model = new DopplerModel(speedOfSound, entityB, entityA, 0);
     }
     
     /**
      * Adjusts various UI element's sizing
      */
-    private void adjustPreferredSizes() {
-        VBox.setVgrow(entityPropertiesVBox, Priority.ALWAYS);
+    private void initializeUIProperties() {
+        grass.layoutYProperty().bind(scenePane.heightProperty().subtract(grass.getHeight()));
+        grass.widthProperty().bind(scenePane.widthProperty());
         
-        VBox.setVgrow(graphHBox, Priority.ALWAYS);
         graphHBox.prefHeightProperty().bind(root.heightProperty().multiply(0.33));
+        
+        Platform.runLater(() -> { // runLater() since the trucks are panes with initial height 0 (they get calculated "later")
+            truckA.layoutYProperty().bind(grass.layoutYProperty().subtract(truckA.getHeight()));
+            truckB.layoutYProperty().bind(grass.layoutYProperty().subtract(truckB.getHeight()));
+        });
     }
     
     /**
@@ -150,6 +139,7 @@ public class FinalProjectController implements Initializable {
      * Updates the LayoutX of the trucks based on the positions of the model's entities
      */
     private void updateTrucks() {
+        // Not using bind since that would technically violate MVC, but bind would be much better
         truckA.setLayoutX(model.getEntityA().getPosition());
         truckB.setLayoutX(model.getEntityB().getPosition());
     }
@@ -158,6 +148,7 @@ public class FinalProjectController implements Initializable {
      * Updates the sliders based on the entity's kinematic properties
      */
     private void updateSliders() {
+        // Not using bind since that would technically violate MVC, but bind would be much better
         Entity entityA = model.getEntityA();
         Entity entityB = model.getEntityB();
         
