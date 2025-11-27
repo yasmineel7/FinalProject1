@@ -182,19 +182,21 @@ public class FinalProjectController implements Initializable {
         xAxis.setLabel(xAxisLabel);
         xAxis.setLowerBound(0);
         xAxis.setUpperBound(30);
-        xAxis.setAutoRanging(false);
+        xAxis.setAutoRanging(true);
         
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel(yAxisLabel);
         yAxis.setLowerBound(0);
         yAxis.setUpperBound(100);
         yAxis.setTickUnit(25);
-        yAxis.setAutoRanging(false);
+        yAxis.setAutoRanging(true);
         
         LineChart<Number, Number> lineChart = new LineChart(xAxis, yAxis);
         lineChart.setTitle(title);
         lineChart.setCreateSymbols(false);
         lineChart.setLegendVisible(false);
+        
+        lineChart.setAnimated(false);
         
         Series<Number, Number> series = new XYChart.Series<>();
         lineChart.getData().add(series);
