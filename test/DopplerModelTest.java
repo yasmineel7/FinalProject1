@@ -17,6 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author 6298686
  */
 public class DopplerModelTest {
+    private DopplerModel dopplerModel;
+    private Entity entityA;
+    private Entity entityB;
     
     public DopplerModelTest() {
     }
@@ -31,6 +34,9 @@ public class DopplerModelTest {
     
     @BeforeEach
     public void setUp() {
+        entityA = new Entity(0.0, 10.0, 0.0, 440.0); 
+        entityB = new Entity(100.0, -5.0, 0.0, 0.0);
+        dopplerModel = new DopplerModel(343.0, entityB, entityA, 0.0);
     }
     
     @AfterEach
@@ -45,27 +51,26 @@ public class DopplerModelTest {
    
        @Test
         void updateObservedFrequency() {
-         Entity observer = new Entity(10, 10, 10, 50);
-         Entity source = new Entity(15, 20, 10, 40);
-         double result = 41.238;
-         
-         DopplerModel model = new DopplerModel();
-        //expected = model.updateObservedFrequency(observer, source);
-         assertEquals(result, source.);
-        
+          dopplerModel.update(0.0);
+          
+        double observedFreqB = entityB.getObservedFrequency();
+        assertNotEquals(0.0, observedFreqB);
+        assertTrue(observedFreqB > 0);
        }
        
        @Test 
        void updateKinematicState() {
-           Entity entity = new Entity(10, 10, 10, 50);
-           double time = 5;
-           
-           double result = 310;
-           
-           DopplerModel model = new DopplerModel();
-           model.updateKinematicState(entity, time);
-           
-           assertEquals()
+          
+        double initialPositionA = entityA.getPosition();
+        double initialVelocityA = entityA.getVelocity();
+        double dt = 1.0;
+        
+        dopplerModel.update(dt);
+        
+        // Position should increase due to positive velocity
+        assertTrue(entityA.getPosition() > initialPositionA);
+        // Velocity should remain the same since acceleration is 0
+        assertEquals(initialVelocityA, entityA.getVelocity());
        }
        
        @Test
