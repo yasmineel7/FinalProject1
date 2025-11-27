@@ -196,6 +196,7 @@ public class FinalProjectController implements Initializable {
         lineChart.setCreateSymbols(false);
         lineChart.setLegendVisible(false);
         
+        //to automatically change the scale
         lineChart.setAnimated(false);
         
         Series<Number, Number> series = new XYChart.Series<>();
@@ -213,6 +214,15 @@ public class FinalProjectController implements Initializable {
     private void addPoint(LineChart lineChart, double x, double y) {
         Series<Number, Number> series = (Series<Number, Number>) lineChart.getData().get(0);
         series.getData().add(new XYChart.Data<>(x, y));
+    }
+    
+    private void clearAllCharts() {
+        for (LineChart<Number, Number> chart : new LineChart[]{frequencyChartA, frequencyChartB, pressureChartA, pressureChartB}) {
+            if (chart != null && chart.getData().size() > 0) {
+            Series<Number, Number> series = (Series<Number, Number>) chart.getData().get(0);
+            series.getData().clear();
+            }
+        }
     }
 
     @FXML
@@ -265,6 +275,9 @@ public class FinalProjectController implements Initializable {
         
         Series<Number, Number> seriesB = (Series<Number, Number>) frequencyChartB.getData().get(0);
         seriesB.getData().clear();
+        
+        //clear charts
+        clearAllCharts();
         
         
     }
