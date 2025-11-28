@@ -59,8 +59,8 @@ public class FinalProjectController implements Initializable {
     
     AnimationTimer timer;
     boolean paused = false;
-
     
+
     @FXML private BorderPane root;
     @FXML private HBox graphHBox;
     @FXML private Pane truckA, truckB;
@@ -160,7 +160,9 @@ public class FinalProjectController implements Initializable {
                 addPoint(frequencyChartA, model.getTime(), model.getEntityA().getObservedFrequency());
                 addPoint(frequencyChartB, model.getTime(), model.getEntityB().getObservedFrequency());
                 
-                updateTrucks();
+                updateTruck(truckA);
+                updateTruck(truckB);
+                
                 updateSliders();
                 
                 lastTime = now;
@@ -233,23 +235,18 @@ public class FinalProjectController implements Initializable {
      * Updates the LayoutX of the trucks based on the positions of the model's entities
      * and the orientation of the trucks based on their direction of movement
      */
-    private void updateTrucks() {
-        Pane[] trucks = {truckA, truckB};
-        
-        for (Pane truck : trucks) {
-            Entity entity = getEntityFromTruck(truck);
-            
-            truck.setLayoutX(entity.getPosition());
-            
-            if (entity.getVelocity() < 0) {
-                truck.setScaleX(-1);
-                truck.getChildren().getLast().setScaleX(-1);
-            } else {
-                truck.setScaleX(1);
-                truck.getChildren().getLast().setScaleX(1);
-            }
+    private void updateTruck(Pane truck) {
+        Entity entity = getEntityFromTruck(truck);
+
+        truck.setLayoutX(entity.getPosition());
+
+        if (entity.getVelocity() < 0) {
+            truck.setScaleX(-1);
+            truck.getChildren().getLast().setScaleX(-1);
+        } else if (entity.getVelocity() > 0) {
+            truck.setScaleX(1);
+            truck.getChildren().getLast().setScaleX(1);
         }
-        
     }
     
     /**
