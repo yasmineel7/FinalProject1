@@ -5,38 +5,27 @@
 package finalproject;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.layout.HBox;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -64,7 +53,6 @@ public class FinalProjectController implements Initializable {
     @FXML private BorderPane root;
     @FXML private HBox graphHBox;
     @FXML private Pane truckA, truckB;
-    @FXML private VBox entityPropertiesVBox;
     @FXML private Slider positionASlider, positionBSlider, velocityASlider, velocityBSlider, accelerationASlider, accelerationBSlider;
     @FXML private Pane scenePane;
     @FXML private Rectangle grass;
@@ -93,6 +81,9 @@ public class FinalProjectController implements Initializable {
         
     }
     
+    /**
+     * Initializes the model and its required parameters
+     */
     private void initializeModel() {
         double speedOfSound = 343;
         Entity entityA = new Entity(0, 0, 0, 50);
@@ -102,7 +93,7 @@ public class FinalProjectController implements Initializable {
     }
     
     /**
-     * Adjusts various UI element's sizing
+     * Adjusts various UI element's sizing and bindings
      */
     private void initializeUIProperties() {
         grass.layoutYProperty().bind(scenePane.heightProperty().subtract(grass.getHeight()));
@@ -333,6 +324,9 @@ public class FinalProjectController implements Initializable {
         series.getData().add(new XYChart.Data<>(x, y));
     }
     
+    /**
+     * Clears the points from all charts
+     */
     private void clearAllCharts() {
         for (LineChart<Number, Number> chart : new LineChart[]{frequencyChartA, frequencyChartB, waveLengthChartA, waveLengthChartB}) {
             if (chart != null && chart.getData().size() > 0) {
@@ -343,7 +337,7 @@ public class FinalProjectController implements Initializable {
     }
 
     @FXML
-    private void handleSlider(MouseEvent event) {
+    private void handleKinematicSliders(MouseEvent event) {
         Slider slider = (Slider) event.getSource();
         double value = slider.getValue();
         
