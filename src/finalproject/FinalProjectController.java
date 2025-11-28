@@ -163,6 +163,9 @@ public class FinalProjectController implements Initializable {
                 updateTruck(truckA);
                 updateTruck(truckB);
                 
+                updateChartBounds(frequencyChartA);
+                updateChartBounds(frequencyChartB);
+                
                 updateSliders();
                 
                 lastTime = now;
@@ -170,6 +173,21 @@ public class FinalProjectController implements Initializable {
         };
         
         timer.start();
+    }
+    
+    /**
+     * update the chart to only see a part of the graph
+     * @param lineChart the lineChart used
+     */
+    private void updateChartBounds(LineChart lineChart) {
+        Series<Number, Number> series = (Series<Number, Number>) lineChart.getData().get(0);
+         NumberAxis xAxis = (NumberAxis) lineChart.getXAxis();
+        
+        double latestX = (double) series.getData().getLast().getXValue();
+        double windowSize = 10;
+        
+        xAxis.setUpperBound(latestX);
+        xAxis.setLowerBound(Math.max(windowSize, latestX) - windowSize);   
     }
     
     /**
@@ -278,22 +296,21 @@ public class FinalProjectController implements Initializable {
         xAxis.setLabel(xAxisLabel);
         xAxis.setLowerBound(0);
         xAxis.setUpperBound(30);
-        xAxis.setAutoRanging(true);
+        xAxis.setAutoRanging(false);
+        xAxis.setAnimated(false);
         
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel(yAxisLabel);
         yAxis.setLowerBound(0);
-        yAxis.setUpperBound(100);
+        yAxis.setUpperBound(300);
         yAxis.setTickUnit(25);
-        yAxis.setAutoRanging(true);
+        yAxis.setAutoRanging(false);
+        yAxis.setAnimated(false);
         
         LineChart<Number, Number> lineChart = new LineChart(xAxis, yAxis);
         lineChart.setTitle(title);
         lineChart.setCreateSymbols(false);
         lineChart.setLegendVisible(false);
-        
-        //to automatically change the scale
-        lineChart.setAnimated(false);
         
         Series<Number, Number> series = new XYChart.Series<>();
         lineChart.getData().add(series);
