@@ -54,8 +54,8 @@ public class FinalProjectController implements Initializable {
     
     LineChart<Number, Number> frequencyChartA;
     LineChart<Number, Number> frequencyChartB;
-    LineChart<Number, Number> pressureChartA;
-    LineChart<Number, Number> pressureChartB;
+    LineChart<Number, Number> waveLengthChartA;
+    LineChart<Number, Number> waveLengthChartB;
     
     AnimationTimer timer;
     boolean paused = false;
@@ -122,10 +122,10 @@ public class FinalProjectController implements Initializable {
     private void initializeCharts() {
         frequencyChartA = createChart("Frequency Observed by A", "Time (s)", "Frequency (Hz)");
         frequencyChartB = createChart("Frequency Observed by B", "Time (s)", "Frequency (Hz)");
-        pressureChartA = createChart("Pressure Observed by A", "Time (s)", "Pressure (kPa)");
-        pressureChartB = createChart("Pressure Observed by B", "Time (s)", "Pressure (kPa)");
+        waveLengthChartA = createChart("Wavelength Observed by A", "Time (s)", "Wavelength (cm)");
+        waveLengthChartB = createChart("Wavelength Observed by B", "Time (s)", "Wavelength (cm)");
         
-        graphHBox.getChildren().addAll(frequencyChartA, frequencyChartB, pressureChartA, pressureChartB);
+        graphHBox.getChildren().addAll(frequencyChartA, frequencyChartB, waveLengthChartA, waveLengthChartB);
     }
         
     /**
@@ -159,12 +159,16 @@ public class FinalProjectController implements Initializable {
                 
                 addPoint(frequencyChartA, model.getTime(), model.getEntityA().getObservedFrequency());
                 addPoint(frequencyChartB, model.getTime(), model.getEntityB().getObservedFrequency());
-                
-                updateTruck(truckA);
-                updateTruck(truckB);
+                addPoint(waveLengthChartA, model.getTime(), model.getVelocityWave() / model.getEntityA().getObservedFrequency() * 10);
+                addPoint(waveLengthChartB, model.getTime(), model.getVelocityWave() / model.getEntityB().getObservedFrequency() * 10);
                 
                 updateChartBounds(frequencyChartA);
                 updateChartBounds(frequencyChartB);
+                updateChartBounds(waveLengthChartA);
+                updateChartBounds(waveLengthChartB);
+                
+                updateTruck(truckA);
+                updateTruck(truckB);
                 
                 updateSliders();
                 
@@ -330,7 +334,7 @@ public class FinalProjectController implements Initializable {
     }
     
     private void clearAllCharts() {
-        for (LineChart<Number, Number> chart : new LineChart[]{frequencyChartA, frequencyChartB, pressureChartA, pressureChartB}) {
+        for (LineChart<Number, Number> chart : new LineChart[]{frequencyChartA, frequencyChartB, waveLengthChartA, waveLengthChartB}) {
             if (chart != null && chart.getData().size() > 0) {
             Series<Number, Number> series = (Series<Number, Number>) chart.getData().get(0);
             series.getData().clear();
