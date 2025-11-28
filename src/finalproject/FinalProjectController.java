@@ -5,8 +5,15 @@
 package finalproject;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,8 +37,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 
 /**
@@ -73,6 +83,11 @@ public class FinalProjectController implements Initializable {
             positionASlider.setMax(model.getEntityA().getMaxPosition());
             positionBSlider.setMax(model.getEntityB().getMaxPosition());
         });
+        
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(scenePane.widthProperty());
+        clip.heightProperty().bind(scenePane.heightProperty());
+        scenePane.setClip(clip);
         
         startSimulation();
         
@@ -120,6 +135,9 @@ public class FinalProjectController implements Initializable {
          timer = new AnimationTimer() {
             private long lastTime = -1;
             
+            private double timeSinceLastSoundWave = 0;
+            private double soundWaveInterval = 0.3;
+            
             @Override
             public void handle(long now) {
                 if (lastTime < 0 || paused) {
@@ -128,6 +146,14 @@ public class FinalProjectController implements Initializable {
                 }
                 
                 double dt = (now - lastTime) / 1e9; // now and lastTime in nanoseconds, dt in seconds
+                
+                timeSinceLastSoundWave += dt;
+                if (timeSinceLastSoundWave > soundWaveInterval) {
+                    timeSinceLastSoundWave = 0;
+                    
+                    createSoundWave(model.getEntityA(), Color.RED);
+                    createSoundWave(model.getEntityB(), Color.BLUE);
+                }
                 
                 model.update(dt);
                 
@@ -145,12 +171,85 @@ public class FinalProjectController implements Initializable {
     }
     
     /**
+     * Creates an expanding and fading sound wave based on the position of the
+     * originator of sound
+     * @param originator The originator (source) of the sound
+     * @param color The color of the sound wave
+     */
+    private void createSoundWave(Entity originator, Color color) {
+        Pane truck = getTruckFromEntity(originator);
+        
+        double centerX = originator.getPosition() + truck.getWidth() / 2;
+        double centerY = truck.getLayoutY() + truck.getHeight() / 2;
+        
+        double animationLength = 1;
+        
+        Circle soundWave = new Circle(centerX, centerY, 0, Color.TRANSPARENT);
+        soundWave.setStroke(color);
+        soundWave.setStrokeWidth(6);
+        
+        FadeTransition fade = new FadeTransition(Duration.seconds(animationLength), soundWave);
+        fade.setFromValue(1);
+        fade.setToValue(0);
+        
+        Timeline size = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(soundWave.radiusProperty(), 0)),
+                new KeyFrame(Duration.seconds(animationLength), new KeyValue(soundWave.radiusProperty(), animationLength * model.getVelocityWave()))
+        );
+        
+        ParallelTransition pt = new ParallelTransition(fade, size);
+        pt.play();
+        
+        scenePane.getChildren().add(soundWave);
+    }
+    
+    /**
+     * Returns the truck associated with the given entity
+     * @param entity The entity to find the truck from
+     * @return The truck associated with the entity
+     */
+    private Pane getTruckFromEntity(Entity entity) {
+        if (entity == model.getEntityA()) {
+            return truckA;
+        }
+        
+        return truckB;
+    }
+    
+    /**
+     * Returns the entity associated with the given truck
+     * @param truck The truck to find the entity from
+     * @return The entity associated with the truck
+     */
+    private Entity getEntityFromTruck(Pane truck) {
+        if (truck == truckA) {
+            return model.getEntityA();
+        }
+        
+        return model.getEntityB();
+    }
+    
+    /**
      * Updates the LayoutX of the trucks based on the positions of the model's entities
+     * and the orientation of the trucks based on their direction of movement
      */
     private void updateTrucks() {
-        // Not using bind since that would technically violate MVC, but bind would be much better
-        truckA.setLayoutX(model.getEntityA().getPosition());
-        truckB.setLayoutX(model.getEntityB().getPosition());
+        Pane[] trucks = {truckA, truckB};
+        
+        for (Pane truck : trucks) {
+            Entity entity = getEntityFromTruck(truck);
+            
+            truck.setLayoutX(entity.getPosition());
+            
+            if (entity.getVelocity() < 0) {
+                truck.setScaleX(-1);
+                truck.getChildren().getLast().setScaleX(-1);
+            } else {
+                truck.setScaleX(1);
+                truck.getChildren().getLast().setScaleX(1);
+            }
+        }
+        
     }
     
     /**
