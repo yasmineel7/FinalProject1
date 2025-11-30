@@ -5,6 +5,7 @@
 package finalproject;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
@@ -49,6 +50,7 @@ public class FinalProjectController implements Initializable {
     AnimationTimer timer;
     boolean paused = false;
     
+    ArrayList<ParallelTransition> soundWaveTransitions = new ArrayList<>();
 
     @FXML private BorderPane root;
     @FXML private HBox graphHBox;
@@ -215,9 +217,14 @@ public class FinalProjectController implements Initializable {
         );
         
         ParallelTransition pt = new ParallelTransition(fade, size);
+        pt.setOnFinished(e -> {
+            soundWaveTransitions.remove(pt);
+            scenePane.getChildren().remove(soundWave);
+        });
         pt.play();
         
         scenePane.getChildren().add(soundWave);
+        soundWaveTransitions.add(pt);
     }
     
     /**
@@ -382,17 +389,13 @@ public class FinalProjectController implements Initializable {
         //set the time
         model.setTime(0);
         
-        //set the graphs
-        Series<Number, Number> seriesA = (Series<Number, Number>) frequencyChartA.getData().get(0);
-        seriesA.getData().clear();
-        
-        Series<Number, Number> seriesB = (Series<Number, Number>) frequencyChartB.getData().get(0);
-        seriesB.getData().clear();
+        for (ParallelTransition pt : soundWaveTransitions) {
+            pt.stop();
+            scenePane.getChildren().removeIf(node -> node instanceof Circle);
+        }
         
         //clear charts
         clearAllCharts();
-        
-        
     }
     
     /**
@@ -412,9 +415,14 @@ public class FinalProjectController implements Initializable {
      */
     @FXML
     void handlePause(ActionEvent event) {
-            timer.stop();
-            startButton.setText("Unpause");
-            paused = true;
+        timer.stop();
+
+        for (ParallelTransition pt : soundWaveTransitions) {
+            pt.pause();
+        }
+
+        startButton.setText("Unpause");
+        paused = true;
     }
     
     /**
@@ -424,6 +432,11 @@ public class FinalProjectController implements Initializable {
     @FXML
     void handleStart(ActionEvent event) {
         timer.start();
+        
+        for (ParallelTransition pt : soundWaveTransitions) {
+            pt.play();
+        }
+        
         startButton.setText("Play");
     }
 
