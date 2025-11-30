@@ -63,22 +63,9 @@ public class FinalProjectController implements Initializable {
         initializeModel();
         initializeCharts();
         initializeUIProperties();
-        
-        scenePane.setMouseTransparent(true);
-        scenePane.widthProperty().addListener((obs, oldVal, newVal) -> {
-            model.getEntityA().setMaxPosition(scenePane.getWidth() - truckA.getWidth());
-            model.getEntityB().setMaxPosition(scenePane.getWidth() - truckB.getWidth());
-            positionASlider.setMax(model.getEntityA().getMaxPosition());
-            positionBSlider.setMax(model.getEntityB().getMaxPosition());
-        });
-        
-        Rectangle clip = new Rectangle();
-        clip.widthProperty().bind(scenePane.widthProperty());
-        clip.heightProperty().bind(scenePane.heightProperty());
-        scenePane.setClip(clip);
+        initializeScenePaneSizing();
         
         startSimulation();
-        
     }
     
     /**
@@ -105,6 +92,12 @@ public class FinalProjectController implements Initializable {
             truckA.layoutYProperty().bind(grass.layoutYProperty().subtract(truckA.getHeight()));
             truckB.layoutYProperty().bind(grass.layoutYProperty().subtract(truckB.getHeight()));
         });
+        
+        // Clip prevents soundwaves from going outside of scenePane
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(scenePane.widthProperty());
+        clip.heightProperty().bind(scenePane.heightProperty());
+        scenePane.setClip(clip);
     }
     
     /**
@@ -118,6 +111,15 @@ public class FinalProjectController implements Initializable {
         
         graphHBox.getChildren().addAll(frequencyChartA, frequencyChartB, waveLengthChartA, waveLengthChartB);
     }
+    
+    private void initializeScenePaneSizing() {
+        scenePane.widthProperty().addListener((obs, oldVal, newVal) -> {
+            model.getEntityA().setMaxPosition(scenePane.getWidth() - truckA.getWidth());
+            model.getEntityB().setMaxPosition(scenePane.getWidth() - truckB.getWidth());
+            positionASlider.setMax(model.getEntityA().getMaxPosition());
+            positionBSlider.setMax(model.getEntityB().getMaxPosition());
+        });
+    }
         
     /**
      * Starts the simulation, updating the model and UI elements with respect to FPS
@@ -130,8 +132,8 @@ public class FinalProjectController implements Initializable {
             private double soundWaveInterval = 0.3;
             
             @Override
-            public void handle(long now) {
-                if (lastTime < 0 || paused) {
+            public void handle(long now) { // Called every frame when timer is running
+                if (lastTime < 0 || paused) { // lastTime initializes to now since otherwise graphs wouldn't start at 0
                     lastTime = now;
                     paused = false;
                 }
@@ -150,7 +152,7 @@ public class FinalProjectController implements Initializable {
                 
                 addPoint(frequencyChartA, model.getTime(), model.getEntityA().getObservedFrequency());
                 addPoint(frequencyChartB, model.getTime(), model.getEntityB().getObservedFrequency());
-                addPoint(waveLengthChartA, model.getTime(), model.getVelocityWave() / model.getEntityA().getObservedFrequency() * 10);
+                addPoint(waveLengthChartA, model.getTime(), model.getVelocityWave() / model.getEntityA().getObservedFrequency() * 10); // Multiplied by 10 for centimeters
                 addPoint(waveLengthChartB, model.getTime(), model.getVelocityWave() / model.getEntityB().getObservedFrequency() * 10);
                 
                 updateChartBounds(frequencyChartA);
@@ -167,7 +169,7 @@ public class FinalProjectController implements Initializable {
             }
         };
         
-        timer.start();
+         timer.start();
     }
     
     /**
@@ -256,7 +258,7 @@ public class FinalProjectController implements Initializable {
         if (entity.getVelocity() < 0) {
             truck.setScaleX(-1);
             truck.getChildren().getLast().setScaleX(-1);
-        } else if (entity.getVelocity() > 0) {
+        } else if (entity.getVelocity() > 0) { // Not using else keyword to avoid flip flopping between left and right in some cases
             truck.setScaleX(1);
             truck.getChildren().getLast().setScaleX(1);
         }
