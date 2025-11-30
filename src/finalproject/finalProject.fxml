@@ -67,10 +67,10 @@
             <Rectangle fx:id="grass" arcHeight="5.0" arcWidth="5.0" fill="#018a07" height="50.0" layoutY="613.0" stroke="BLACK" strokeType="INSIDE" width="892.0" />
             <Pane fx:id="truckA">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="80.0" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" layoutX="77.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
-                  <Circle fill="WHITE" layoutX="15.0" layoutY="40.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
-                  <Circle fill="WHITE" layoutX="65.0" layoutY="40.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
+                  <Rectangle fx:id="truckABody" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="40.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="80.0" />
+                  <Rectangle fx:id="truckACabin" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" layoutX="77.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="20.0" />
+                  <Circle fx:id="truckAWheel1" fill="WHITE" layoutX="15.0" layoutY="40.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
+                  <Circle fx:id="truckAWheel2" fill="WHITE" layoutX="65.0" layoutY="40.0" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
                   <Text layoutX="20.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Truck A">
                      <font>
                         <Font name="System Bold" size="12.0" />
@@ -80,10 +80,10 @@
             </Pane>
             <Pane fx:id="truckB">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="60.0" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="20.0" layoutX="57.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="15.0" />
-                  <Circle fill="WHITE" layoutX="10.0" layoutY="30.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
-                  <Circle fill="WHITE" layoutX="50.0" layoutY="30.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
+                  <Rectangle fx:id="truckBBody" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="60.0" />
+                  <Rectangle fx:id="truckBCabin" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="20.0" layoutX="57.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="15.0" />
+                  <Circle fx:id="truckBWheel1" fill="WHITE" layoutX="10.0" layoutY="30.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
+                  <Circle fx:id="truckBWheel2" fill="WHITE" layoutX="50.0" layoutY="30.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" />
                   <Text layoutX="10.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Truck B" />
                </children>
             </Pane>
@@ -106,7 +106,7 @@
           </Menu>
           <Menu mnemonicParsing="false" text="View">
             <items>
-              <MenuItem fx:id="menuItemSettings" mnemonicParsing="false" onAction="#handleSettings" text="Settings" />
+              <MenuItem mnemonicParsing="false" onAction="#handleSettings" text="Change Colors" />
             </items>
           </Menu>
         </menus>
