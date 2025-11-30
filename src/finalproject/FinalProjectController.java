@@ -28,10 +28,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -70,7 +74,18 @@ public class FinalProjectController implements Initializable {
     @FXML private Pane scenePane;
     @FXML private Rectangle grass;
     @FXML private Button startButton, pauseButton, exitButton, resetButton;
-    @FXML private MenuItem menuItemSettings;
+    @FXML private Rectangle truckABody, truckACabin, truckBBody, truckBCabin;
+    @FXML private Circle truckAWheel1, truckAWheel2, truckBWheel1, truckBWheel2;
+    
+    // Current colors
+    private Color truckAColor = Color.WHITE;
+    private Color truckBColor = Color.WHITE;
+    private Color wheelsAColor = Color.WHITE;
+    private Color wheelsBColor = Color.WHITE;
+    private Color grassColor = Color.web("#018a07");
+    
+     // Settings window components
+    private Stage settingsStage;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -333,16 +348,11 @@ public class FinalProjectController implements Initializable {
         Series<Number, Number> series = (Series<Number, Number>) lineChart.getData().get(0);
         series.getData().add(new XYChart.Data<>(x, y));
     }
-    
-    private void clearAllCharts() {
-        for (LineChart<Number, Number> chart : new LineChart[]{frequencyChartA, frequencyChartB, pressureChartA, pressureChartB}) {
-            if (chart != null && chart.getData().size() > 0) {
-            Series<Number, Number> series = (Series<Number, Number>) chart.getData().get(0);
-            series.getData().clear();
-            }
-        }
-    }
 
+    /**
+     * handle the value selected by the user on the sliders
+     * @param event the mouse event
+     */
     @FXML
     private void handleSlider(MouseEvent event) {
         Slider slider = (Slider) event.getSource();
@@ -366,12 +376,114 @@ public class FinalProjectController implements Initializable {
     }
     
     /**
+     * create the window to change the appearance of the trucks
+     */
+    private void createSettingsWindow() {
+        if (settingsStage != null) {
+            settingsStage.show();
+            settingsStage.toFront();
+            return;
+        }
+        
+        settingsStage = new Stage();
+        settingsStage.setTitle("Settings");
+        
+        VBox root = new VBox(10);
+        root.setPadding(new Insets(15));
+        
+        //colour of truckA and truckB
+         Label truckALabel = new Label("Truck A Color:");
+        ColorPicker truckAColorPicker = new ColorPicker(truckAColor);
+        truckAColorPicker.setOnAction(e -> {
+            truckAColor = truckAColorPicker.getValue();
+            updateTruckColors();
+        });
+        
+        Label truckBLabel = new Label("Truck B Color:");
+        ColorPicker truckBColorPicker = new ColorPicker(truckBColor);
+        truckBColorPicker.setOnAction(e -> {
+            truckBColor = truckBColorPicker.getValue();
+            updateTruckColors();
+        });
+        
+        //Wheels of TruckA and TruckB
+        Label wheelsALabel = new Label("Wheels Color of TruckA:");
+        ColorPicker wheelsAColorPicker = new ColorPicker(wheelsAColor);
+        wheelsAColorPicker.setOnAction(e -> {
+            wheelsAColor = wheelsAColorPicker.getValue();
+            updateTruckColors();
+        });
+        
+        Label wheelsBLabel = new Label("Wheels Color: of TruckB");
+        ColorPicker wheelsBColorPicker = new ColorPicker(wheelsBColor);
+        wheelsBColorPicker.setOnAction(e -> {
+            wheelsBColor = wheelsBColorPicker.getValue();
+            updateTruckColors();
+        });
+        
+        //button exitSettings
+        Button exitSettingsButton = new Button("Exit Settings");
+        exitSettingsButton.setOnAction(e -> {
+            Stage stage = (Stage) exitSettingsButton.getScene().getWindow();
+            stage.close();
+        });
+        
+        //buttonn reset
+        Button resetButton = new Button("Reset to Defaults");
+        resetButton.setOnAction(e -> {
+            resetColorsToDefault();
+            truckAColorPicker.setValue(truckAColor);
+            truckBColorPicker.setValue(truckBColor);
+            wheelsAColorPicker.setValue(wheelsAColor);
+            wheelsBColorPicker.setValue(wheelsBColor);
+        });
+        
+        root.getChildren().addAll(truckALabel, truckAColorPicker, truckBLabel, truckBColorPicker, 
+                wheelsALabel, wheelsAColorPicker, wheelsBLabel, wheelsBColorPicker, resetButton, exitSettingsButton);
+        
+         Scene scene = new Scene(root, 300, 400);
+        settingsStage.setScene(scene);
+        settingsStage.show();
+    }
+    
+    /**
+     * update the color of trucks
+     */
+    private void updateTruckColors() {
+        //change color of TruckA 
+         if (truckABody != null) truckABody.setFill(truckAColor);
+        if (truckACabin != null) truckACabin.setFill(truckAColor);
+        if (truckAWheel1 != null) truckAWheel1.setFill(wheelsAColor);
+        if (truckAWheel2 != null) truckAWheel2.setFill(wheelsAColor);
+        
+        //change color of TruckB
+         if (truckBBody != null) truckBBody.setFill(truckBColor);
+        if (truckBCabin != null) truckBCabin.setFill(truckBColor);
+        if (truckBWheel1 != null) truckBWheel1.setFill(wheelsBColor);
+        if (truckBWheel2 != null) truckBWheel2.setFill(wheelsBColor);
+        
+    }
+    
+    /**
+     * the reset the color of the Trucks to their original one
+     */
+    private void resetColorsToDefault() {
+        truckAColor = Color.WHITE;
+        truckBColor = Color.WHITE;
+        wheelsAColor = Color.WHITE;
+        wheelsBColor = Color.WHITE;
+        grassColor = Color.web("#018a07");
+        
+        updateTruckColors();
+    }
+    
+    /**
      * handle the settings of the menuItem settings
      * @param event the action event
      */
     @FXML
     void handleSettings(ActionEvent event) {
-
+        createSettingsWindow();
     }
     
     /**
@@ -403,10 +515,8 @@ public class FinalProjectController implements Initializable {
         Series<Number, Number> seriesB = (Series<Number, Number>) frequencyChartB.getData().get(0);
         seriesB.getData().clear();
         
-        //clear charts
-        clearAllCharts();
-        
-        
+        //reset the colors of the trucks
+        resetColorsToDefault();    
     }
     
     /**
@@ -440,5 +550,4 @@ public class FinalProjectController implements Initializable {
         timer.start();
         startButton.setText("Play");
     }
-
 }
