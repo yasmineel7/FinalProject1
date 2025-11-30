@@ -84,8 +84,9 @@ public class FinalProjectController implements Initializable {
     private Color wheelsBColor = Color.WHITE;
     private Color grassColor = Color.web("#018a07");
     
-     // Settings window components
+     // Settings window components and speed of animation
     private Stage settingsStage;
+    private double animationSpeed = 1;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -217,19 +218,20 @@ public class FinalProjectController implements Initializable {
         double centerX = originator.getPosition() + truck.getWidth() / 2;
         double centerY = truck.getLayoutY() + truck.getHeight() / 2;
         
-        double animationLength = 1;
+        double baseAnimationLength = 1;
+        double actualAnimationLength = baseAnimationLength / animationSpeed;
         
         Circle soundWave = new Circle(centerX, centerY, 0, Color.TRANSPARENT);
         soundWave.setStroke(color);
         soundWave.setStrokeWidth(6);
         
-        FadeTransition fade = new FadeTransition(Duration.seconds(animationLength), soundWave);
+        FadeTransition fade = new FadeTransition(Duration.seconds(actualAnimationLength), soundWave);
         fade.setFromValue(1);
         fade.setToValue(0);
         
         Timeline size = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(soundWave.radiusProperty(), 0)),
-                new KeyFrame(Duration.seconds(animationLength), new KeyValue(soundWave.radiusProperty(), animationLength * model.getVelocityWave()))
+                new KeyFrame(Duration.seconds(actualAnimationLength), new KeyValue(soundWave.radiusProperty(), actualAnimationLength * model.getVelocityWave()))
         );
         
         ParallelTransition pt = new ParallelTransition(fade, size);
@@ -247,7 +249,6 @@ public class FinalProjectController implements Initializable {
         if (entity == model.getEntityA()) {
             return truckA;
         }
-        
         return truckB;
     }
     
@@ -260,7 +261,6 @@ public class FinalProjectController implements Initializable {
         if (truck == truckA) {
             return model.getEntityA();
         }
-        
         return model.getEntityB();
     }
     
@@ -414,7 +414,7 @@ public class FinalProjectController implements Initializable {
             updateTruckColors();
         });
         
-        Label wheelsBLabel = new Label("Wheels Color: of TruckB");
+        Label wheelsBLabel = new Label("Wheels Color of TruckB:");
         ColorPicker wheelsBColorPicker = new ColorPicker(wheelsBColor);
         wheelsBColorPicker.setOnAction(e -> {
             wheelsBColor = wheelsBColorPicker.getValue();
@@ -428,6 +428,25 @@ public class FinalProjectController implements Initializable {
             stage.close();
         });
         
+        //animation
+        Label speedLabel = new Label("Speed: " + String.format("%.1fx", animationSpeed));
+        Slider speedSlider = new Slider(0.25, 3.0, animationSpeed);
+        speedSlider.setShowTickLabels(true);
+        speedSlider.setShowTickMarks(true);
+        speedSlider.setMajorTickUnit(0.5);
+        speedSlider.setBlockIncrement(0.1);
+    
+        speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+        animationSpeed = newVal.doubleValue();
+        speedLabel.setText("Speed: " + String.format("%.1fx", animationSpeed));
+            });
+    
+        // Add description labels and Hbox
+        Label slowLabel = new Label("Slow");
+        Label fastLabel = new Label("Fast");
+        HBox speedLabels = new HBox(10);
+        speedLabels.getChildren().addAll(slowLabel, fastLabel);
+        
         //buttonn reset
         Button resetButton = new Button("Reset to Defaults");
         resetButton.setOnAction(e -> {
@@ -439,9 +458,10 @@ public class FinalProjectController implements Initializable {
         });
         
         root.getChildren().addAll(truckALabel, truckAColorPicker, truckBLabel, truckBColorPicker, 
-                wheelsALabel, wheelsAColorPicker, wheelsBLabel, wheelsBColorPicker, resetButton, exitSettingsButton);
+                wheelsALabel, wheelsAColorPicker, wheelsBLabel, wheelsBColorPicker
+                ,speedLabel, speedSlider,speedLabels,resetButton, exitSettingsButton);
         
-         Scene scene = new Scene(root, 300, 400);
+        Scene scene = new Scene(root, 400, 500);
         settingsStage.setScene(scene);
         settingsStage.show();
     }
@@ -515,8 +535,9 @@ public class FinalProjectController implements Initializable {
         Series<Number, Number> seriesB = (Series<Number, Number>) frequencyChartB.getData().get(0);
         seriesB.getData().clear();
         
-        //reset the colors of the trucks
+        //reset the colors of the trucks and animation
         resetColorsToDefault();    
+        animationSpeed = 1;
     }
     
     /**
