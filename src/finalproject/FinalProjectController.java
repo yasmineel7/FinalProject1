@@ -30,6 +30,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
@@ -69,6 +70,7 @@ public class FinalProjectController implements Initializable {
     @FXML private Pane scenePane;
     @FXML private Rectangle grass;
     @FXML private Button startButton, pauseButton, exitButton, resetButton;
+    @FXML private MenuItem menuItemSettings;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -361,6 +363,15 @@ public class FinalProjectController implements Initializable {
         } else {
             entity.setAcceleration(value);
         }
+    }
+    
+    /**
+     * handle the settings of the menuItem settings
+     * @param event the action event
+     */
+    @FXML
+    void handleSettings(ActionEvent event) {
+
     }
     
     /**
