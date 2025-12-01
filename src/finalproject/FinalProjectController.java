@@ -25,16 +25,13 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -135,6 +132,9 @@ public class FinalProjectController implements Initializable {
         graphHBox.getChildren().addAll(frequencyChartA, frequencyChartB, waveLengthChartA, waveLengthChartB);
     }
     
+    /**
+     * Changes the max position of the entities and sliders based on the scenePane width
+     */
     private void initializeScenePaneSizing() {
         scenePane.widthProperty().addListener((obs, oldVal, newVal) -> {
             model.getEntityA().setMaxPosition(scenePane.getWidth() - truckA.getWidth());
@@ -552,7 +552,7 @@ public class FinalProjectController implements Initializable {
         //clear charts
         clearAllCharts();
         //reset the colors of the trucks and animation
-        resetColorsToDefault();    
+        resetColorsToDefault();
         animationSpeed = 1;
     }
     
