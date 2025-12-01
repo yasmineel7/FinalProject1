@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;

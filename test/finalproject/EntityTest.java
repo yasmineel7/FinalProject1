@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
- * @author jccpa
+ * @author Jacques
  */
 public class EntityTest {
     

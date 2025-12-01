@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author 6298686
+ * @author Yasmine
  */
 public class FinalProject extends Application {
 

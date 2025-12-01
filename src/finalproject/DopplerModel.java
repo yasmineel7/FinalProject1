@@ -6,9 +6,10 @@ package finalproject;
 
 import java.util.Objects;
 
-/**
+/** Handles back-end logic regarding entities, their positions and 
+ * observed frequencies.
  *
- * @author yasmi
+ * @author Yasmine and Jacques
  */
 public class DopplerModel {
     
