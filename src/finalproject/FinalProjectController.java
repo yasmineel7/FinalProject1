@@ -22,8 +22,16 @@ import javafx.scene.layout.HBox;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -59,6 +67,19 @@ public class FinalProjectController implements Initializable {
     @FXML private Pane scenePane;
     @FXML private Rectangle grass;
     @FXML private Button startButton, pauseButton, exitButton, resetButton;
+    @FXML private Rectangle truckABody, truckACabin, truckBBody, truckBCabin;
+    @FXML private Circle truckAWheel1, truckAWheel2, truckBWheel1, truckBWheel2;
+    
+    // Current colors
+    private Color truckAColor = Color.WHITE;
+    private Color truckBColor = Color.WHITE;
+    private Color wheelsAColor = Color.WHITE;
+    private Color wheelsBColor = Color.WHITE;
+    private Color grassColor = Color.web("#018a07");
+    
+     // Settings window components and speed of animation
+    private Stage settingsStage;
+    private double animationSpeed = 1;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -201,19 +222,20 @@ public class FinalProjectController implements Initializable {
         double centerX = originator.getPosition() + truck.getWidth() / 2;
         double centerY = truck.getLayoutY() + truck.getHeight() / 2;
         
-        double animationLength = 1;
+        double baseAnimationLength = 1;
+        double actualAnimationLength = baseAnimationLength / animationSpeed;
         
         Circle soundWave = new Circle(centerX, centerY, 0, Color.TRANSPARENT);
         soundWave.setStroke(color);
         soundWave.setStrokeWidth(6);
         
-        FadeTransition fade = new FadeTransition(Duration.seconds(animationLength), soundWave);
+        FadeTransition fade = new FadeTransition(Duration.seconds(actualAnimationLength), soundWave);
         fade.setFromValue(1);
         fade.setToValue(0);
         
         Timeline size = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(soundWave.radiusProperty(), 0)),
-                new KeyFrame(Duration.seconds(animationLength), new KeyValue(soundWave.radiusProperty(), animationLength * model.getVelocityWave()))
+                new KeyFrame(Duration.seconds(actualAnimationLength), new KeyValue(soundWave.radiusProperty(), actualAnimationLength * model.getVelocityWave()))
         );
         
         ParallelTransition pt = new ParallelTransition(fade, size);
@@ -236,7 +258,6 @@ public class FinalProjectController implements Initializable {
         if (entity == model.getEntityA()) {
             return truckA;
         }
-        
         return truckB;
     }
     
@@ -249,7 +270,6 @@ public class FinalProjectController implements Initializable {
         if (truck == truckA) {
             return model.getEntityA();
         }
-        
         return model.getEntityB();
     }
     
@@ -345,6 +365,10 @@ public class FinalProjectController implements Initializable {
         }
     }
 
+    /**
+     * handle the value selected by the user on the sliders
+     * @param event the mouse event
+     */
     @FXML
     private void handleKinematicSliders(MouseEvent event) {
         Slider slider = (Slider) event.getSource();
@@ -365,6 +389,137 @@ public class FinalProjectController implements Initializable {
         } else {
             entity.setAcceleration(value);
         }
+    }
+    
+    /**
+     * create the window to change the appearance of the trucks
+     */
+    private void createSettingsWindow() {
+        if (settingsStage != null) {
+            settingsStage.show();
+            settingsStage.toFront();
+            return;
+        }
+        
+        settingsStage = new Stage();
+        settingsStage.setTitle("Settings");
+        
+        VBox root = new VBox(10);
+        root.setPadding(new Insets(15));
+        
+        //colour of truckA and truckB
+         Label truckALabel = new Label("Truck A Color:");
+        ColorPicker truckAColorPicker = new ColorPicker(truckAColor);
+        truckAColorPicker.setOnAction(e -> {
+            truckAColor = truckAColorPicker.getValue();
+            updateTruckColors();
+        });
+        
+        Label truckBLabel = new Label("Truck B Color:");
+        ColorPicker truckBColorPicker = new ColorPicker(truckBColor);
+        truckBColorPicker.setOnAction(e -> {
+            truckBColor = truckBColorPicker.getValue();
+            updateTruckColors();
+        });
+        
+        //Wheels of TruckA and TruckB
+        Label wheelsALabel = new Label("Wheels Color of TruckA:");
+        ColorPicker wheelsAColorPicker = new ColorPicker(wheelsAColor);
+        wheelsAColorPicker.setOnAction(e -> {
+            wheelsAColor = wheelsAColorPicker.getValue();
+            updateTruckColors();
+        });
+        
+        Label wheelsBLabel = new Label("Wheels Color of TruckB:");
+        ColorPicker wheelsBColorPicker = new ColorPicker(wheelsBColor);
+        wheelsBColorPicker.setOnAction(e -> {
+            wheelsBColor = wheelsBColorPicker.getValue();
+            updateTruckColors();
+        });
+        
+        //button exitSettings
+        Button exitSettingsButton = new Button("Exit Settings");
+        exitSettingsButton.setOnAction(e -> {
+            Stage stage = (Stage) exitSettingsButton.getScene().getWindow();
+            stage.close();
+        });
+        
+        //animation
+        Label speedLabel = new Label("Speed: " + String.format("%.1fx", animationSpeed));
+        Slider speedSlider = new Slider(0.25, 3.0, animationSpeed);
+        speedSlider.setShowTickLabels(true);
+        speedSlider.setShowTickMarks(true);
+        speedSlider.setMajorTickUnit(0.5);
+        speedSlider.setBlockIncrement(0.1);
+    
+        speedSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+        animationSpeed = newVal.doubleValue();
+        speedLabel.setText("Speed: " + String.format("%.1fx", animationSpeed));
+            });
+    
+        // Add description labels and Hbox
+        Label slowLabel = new Label("Slow");
+        Label fastLabel = new Label("Fast");
+        HBox speedLabels = new HBox(10);
+        speedLabels.getChildren().addAll(slowLabel, fastLabel);
+        
+        //buttonn reset
+        Button resetButton = new Button("Reset to Defaults");
+        resetButton.setOnAction(e -> {
+            resetColorsToDefault();
+            truckAColorPicker.setValue(truckAColor);
+            truckBColorPicker.setValue(truckBColor);
+            wheelsAColorPicker.setValue(wheelsAColor);
+            wheelsBColorPicker.setValue(wheelsBColor);
+        });
+        
+        root.getChildren().addAll(truckALabel, truckAColorPicker, truckBLabel, truckBColorPicker, 
+                wheelsALabel, wheelsAColorPicker, wheelsBLabel, wheelsBColorPicker
+                ,speedLabel, speedSlider,speedLabels,resetButton, exitSettingsButton);
+        
+        Scene scene = new Scene(root, 400, 500);
+        settingsStage.setScene(scene);
+        settingsStage.show();
+    }
+    
+    /**
+     * update the color of trucks
+     */
+    private void updateTruckColors() {
+        //change color of TruckA 
+         if (truckABody != null) truckABody.setFill(truckAColor);
+        if (truckACabin != null) truckACabin.setFill(truckAColor);
+        if (truckAWheel1 != null) truckAWheel1.setFill(wheelsAColor);
+        if (truckAWheel2 != null) truckAWheel2.setFill(wheelsAColor);
+        
+        //change color of TruckB
+         if (truckBBody != null) truckBBody.setFill(truckBColor);
+        if (truckBCabin != null) truckBCabin.setFill(truckBColor);
+        if (truckBWheel1 != null) truckBWheel1.setFill(wheelsBColor);
+        if (truckBWheel2 != null) truckBWheel2.setFill(wheelsBColor);
+        
+    }
+    
+    /**
+     * the reset the color of the Trucks to their original one
+     */
+    private void resetColorsToDefault() {
+        truckAColor = Color.WHITE;
+        truckBColor = Color.WHITE;
+        wheelsAColor = Color.WHITE;
+        wheelsBColor = Color.WHITE;
+        grassColor = Color.web("#018a07");
+        
+        updateTruckColors();
+    }
+    
+    /**
+     * handle the settings of the menuItem settings
+     * @param event the action event
+     */
+    @FXML
+    void handleSettings(ActionEvent event) {
+        createSettingsWindow();
     }
     
     /**
@@ -396,6 +551,9 @@ public class FinalProjectController implements Initializable {
         
         //clear charts
         clearAllCharts();
+        //reset the colors of the trucks and animation
+        resetColorsToDefault();    
+        animationSpeed = 1;
     }
     
     /**
@@ -439,5 +597,4 @@ public class FinalProjectController implements Initializable {
         
         startButton.setText("Play");
     }
-
 }
