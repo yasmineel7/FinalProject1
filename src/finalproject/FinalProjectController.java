@@ -45,17 +45,17 @@ import javafx.util.Duration;
  * @author Yasmine and Jacques
  */
 public class FinalProjectController implements Initializable {
-    DopplerModel model;
+    private DopplerModel model;
     
-    LineChart<Number, Number> frequencyChartA;
-    LineChart<Number, Number> frequencyChartB;
-    LineChart<Number, Number> waveLengthChartA;
-    LineChart<Number, Number> waveLengthChartB;
+    private LineChart<Number, Number> frequencyChartA;
+    private LineChart<Number, Number> frequencyChartB;
+    private LineChart<Number, Number> waveLengthChartA;
+    private LineChart<Number, Number> waveLengthChartB;
     
-    AnimationTimer timer;
-    boolean paused = false;
+    private AnimationTimer timer;
+    private boolean paused = false;
     
-    ArrayList<ParallelTransition> soundWaveTransitions = new ArrayList<>();
+    private ArrayList<ParallelTransition> soundWaveTransitions = new ArrayList<>();
 
     @FXML private BorderPane root;
     @FXML private HBox graphHBox;
