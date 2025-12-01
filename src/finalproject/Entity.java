@@ -7,7 +7,7 @@ package finalproject;
 /** Describes an entity with kinematic properties that produces and observes
  * and emitted frequency.
  *
- * @author Yasmine El Hattab 6298686
+ * @author Yasmine and Jacques
  */
 public class Entity {
     private double position;
