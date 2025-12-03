@@ -72,7 +72,6 @@ public class FinalProjectController implements Initializable {
     private Color truckBColor = Color.WHITE;
     private Color wheelsAColor = Color.WHITE;
     private Color wheelsBColor = Color.WHITE;
-    private Color grassColor = Color.web("#018a07");
     
      // Settings window components and speed of animation
     private Stage settingsStage;
